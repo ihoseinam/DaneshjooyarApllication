@@ -46,13 +46,6 @@ fun BottomNavigationBar(
             selectedIcon = Icons.Filled.Home,
             deselectedIcon = Icons.Outlined.Home,
         ),
-
-        BottomNavItem(
-            name = "دسته بندی",
-            route = Screen.Category.route,
-            selectedIcon = Icons.Filled.List,
-            deselectedIcon = Icons.Outlined.List,
-        ),
         BottomNavItem(
             name = "سبد خرید",
             route = Screen.ShopingCard.route,

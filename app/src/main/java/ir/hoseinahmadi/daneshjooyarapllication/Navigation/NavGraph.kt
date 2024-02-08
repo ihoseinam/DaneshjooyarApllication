@@ -38,7 +38,8 @@ fun SetUpNavGraph(navController: NavHostController) {
             MyPack(navController = navController)
         }
 
-        composable(route = Screen.InfoItemScreen.route + "?data={data}",
+        composable(route = Screen.InfoItemScreen.route
+                + "?data={data}",
             arguments = listOf(
                 navArgument("data"){
                     type = NavType.StringType

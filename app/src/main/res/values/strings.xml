@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">DaneshjooyarApllication</string>
+    <string name="app_name">دانشجویار</string>
+    <string name="androidTitle">"جامع ترین دوره آموزش برنامه نویسی اندروید (کاتلین، فلاتر و جاوا)</string>
+    <string name="afzoneTitle">"دوره آموزش افزونه نویسی وردپرس، پلاگین نویسی حرفه ای برای وردپرس"</string>
+   <string name="an1">آموزش کامل نصب و راه اندازی نرم افزار اندروید استودیو</string>
+   <string name="an2">آموزش برنامه نویسی با کمک جت جی پی تی و گوگل بارد</string>
+   <string name="an3">آموزش فلاتر و جاوا جهت تکمیل رزومه</string>
+   <string name="an4">ایجاد اپلیکیشن نمایش قیمت ارز و طلا به صورت آنلاین</string>
+   <string name="an5">آموزش اعتبارسنجی و احراز هویت کاربران با ایمیل</string>
+   <string name="an6">آموزش تخصصی ارتباط با سرور و آنلاین کردن اپلیکیشن ها</string>
+   <string name="an7">دریافت مدرک طلایی قابل استعلام پس از اتمام دوره</string>
+
 </resources>

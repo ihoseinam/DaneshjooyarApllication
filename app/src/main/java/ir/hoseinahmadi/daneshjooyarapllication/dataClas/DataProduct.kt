@@ -6,4 +6,6 @@ data class DataProduct(
     val nameTicher :String,
     val img :Int,
     val priceOr:Int,
+    val darsad :Int =0,
+    val info :ArrayList<String>
 )

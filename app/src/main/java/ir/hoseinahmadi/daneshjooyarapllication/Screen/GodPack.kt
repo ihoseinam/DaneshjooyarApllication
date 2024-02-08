@@ -137,36 +137,11 @@ fun PackGold(navController: NavHostController) {
                     "جامع ترین دوره آموزش برنامه نویسی اندروید (کاتلین، فلاتر و جاوا)",
                     "علیرضا احمدی",
                     R.drawable.androidgold,
-                    125000
+                    125000,
+                    0,
+                   arrayListOf("")
                 ),
-                DataProduct(
-                    1,
-                    "جامع ترین دوره آموزش برنامه نویسی اندروید (کاتلین، فلاتر و جاوا)",
-                    "علیرضا احمدی2",
-                    R.drawable.danlogo,
-                    125000
-                ),
-                DataProduct(
-                    1,
-                    "جامع ترین دوره آموزش برنامه نویسی اندروید (کاتلین، فلاتر و جاوا)",
-                    "علیرضا احمدی3",
-                    R.drawable.ic_launcher_background,
-                    125000
-                ),
-                DataProduct(
-                    1,
-                    "جامع ترین دوره آموزش برنامه نویسی اندروید (کاتلین، فلاتر و جاوا)",
-                    "علیرضا احمدی4",
-                    R.drawable.ic_launcher_background,
-                    125000
-                ),
-                DataProduct(
-                    1,
-                    "جامع ترین دوره آموزش برنامه نویسی اندروید (کاتلین، فلاتر و جاوا)",
-                    "علیرضا احمدی5",
-                    R.drawable.ic_launcher_background,
-                    125000
-                ),
+
             )
 
             pack(navController = navController, item)
@@ -186,6 +161,8 @@ fun GoldPackItem(navController: NavHostController, data: DataProduct, font: Font
         data.nameTicher,
         data.img,
         data.priceOr,
+        data.darsad,
+        data.info
     )
     val gson = Gson()
     val itemString = gson.toJson(datazori)

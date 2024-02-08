@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -45,12 +46,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.gson.Gson
 import ir.hoseinahmadi.daneshjooyarapllication.Navigation.Screen
 import ir.hoseinahmadi.daneshjooyarapllication.R
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.DataProduct
@@ -67,24 +72,42 @@ fun HomeScreen(navController: NavHostController) {
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val item = arrayOf(
-            DataProduct(1, "جامع ترین دوره آموزش برنامه نویسی اندروید (کاتلین، فلاتر و جاوا)", "علیرضا احمدی", R.drawable.androidgold, 3450000),
-            DataProduct(1, "دوره آموزش افزونه نویسی وردپرس، پلاگین نویسی حرفه ای برای وردپرس", "حامد مودی", R.drawable.word, 499000),
-            DataProduct(1, "2اندروی3", "علیرضا احمدی", R.drawable.androidgold, 254000),
-            DataProduct(1, "اندروید4", "علیرضا احمدی", R.drawable.androidgold, 254000),
-            DataProduct(1, "اندروید5", "علیرضا احمدی", R.drawable.androidgold, 254000),
-            DataProduct(1, "اندروید5", "علیرضا احمدی", R.drawable.androidgold, 254000),
-            DataProduct(1, "اندروید6", "علیرضا احمدی", R.drawable.androidgold, 254000),
-            DataProduct(1, "اندروید7", "علیرضا احمدی", R.drawable.androidgold, 254000),
-            DataProduct(1, "اندروید8", "علیرضا احمدی", R.drawable.androidgold, 254000),
-            DataProduct(1, "اندروید9", "علیرضا احمدی", R.drawable.androidgold, 254000),
-            DataProduct(1, "اندروید10", "علیرضا احمدی", R.drawable.androidgold, 254000),
-        )
 
 
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(modifier = Modifier.fillMaxSize(), state = rememberLazyListState()) {
             item { MySlider() }
             item {
+                val item = arrayOf(
+                    DataProduct(
+                        1,
+                        stringResource(id = R.string.androidTitle),
+                        "علیرضا احمدی",
+                        R.drawable.androidgold,
+                        6900000,
+                        60,
+                        arrayListOf(
+                            stringResource(id = R.string.an1),
+                            stringResource(id = R.string.an2),
+                            stringResource(id = R.string.an3),
+                            stringResource(id = R.string.an4),
+                            stringResource(id = R.string.an5),
+                            stringResource(id = R.string.an6),
+                            stringResource(id = R.string.an7),
+                        )
+                    ),
+                    DataProduct(
+                        2,
+                        stringResource(id = R.string.afzoneTitle),
+                        "حامد مودی",
+                        R.drawable.word,
+                        499000,
+                        10,
+                        arrayListOf(
+
+                        )
+                    ),
+
+                    )
                 TopProduct(
                     text = "محبوب ترین ها",
                     navController,
@@ -99,7 +122,7 @@ fun HomeScreen(navController: NavHostController) {
                         .wrapContentHeight()
                 ) {
                     itemsIndexed(item) { index: Int, item: DataProduct ->
-                        ItemProduct(data = item)
+                        ItemProduct(data = item, navController)
                     }
                 }
 
@@ -395,13 +418,33 @@ fun TopProduct(text: String, navController: NavHostController, route1: String, r
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ItemProduct(data: DataProduct) {
+fun ItemProduct(data: DataProduct, navController: NavHostController) {
+    val zori = DataProduct(
+        data.id,
+        data.title,
+        data.nameTicher,
+        data.img,
+        data.priceOr,
+        data.darsad,
+        data.info
+    )
+    val gson = Gson()
+    val itemstring = gson.toJson(zori)
+    val priceortakh = darsadfun(data.priceOr, data.darsad)
+
     Card(
+        onClick = {
+            navController.navigate(
+                route = Screen.InfoItemScreen.route + "?data=${itemstring}"
+            )
+        },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
         elevation = CardDefaults.cardElevation(15.dp),
+        shape = RoundedCornerShape(5.dp),
         modifier = Modifier
             .width(300.dp)
             .height(300.dp)
@@ -412,15 +455,43 @@ fun ItemProduct(data: DataProduct) {
                 .fillMaxSize()
                 .padding(8.dp)
         ) {
-            Image(
-                painter = painterResource(id = data.img),
-                contentDescription = "",
+
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(3.dp)
                     .weight(0.6f),
-                alignment = Alignment.TopCenter
-            )
+                contentAlignment = Alignment.TopCenter
+            ) {
+                Image(
+                    painter = painterResource(id = data.img),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(3.dp),
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, start = 6.dp), contentAlignment = Alignment.TopStart
+                ) {
+                    Text(
+                        text = "${data.darsad} %",
+                        modifier = Modifier
+                            .width(40.dp)
+                            .height(24.dp)
+                            .background(
+                                Color(0xfff32e2e),
+                                shape = RoundedCornerShape(10.dp)
+                            ),
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = myFont,
+                        fontSize = 15.sp
+                    )
+                }
+            }
+
             Column(modifier = Modifier.weight(0.4f)) {
                 Text(
                     text = data.title,
@@ -434,16 +505,14 @@ fun ItemProduct(data: DataProduct) {
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val zori = String.format("%,d", data.priceOr)
                     Text(
-                        text = zori,
+                        text = priceortakh.toString(),
                         modifier = Modifier
                             .weight(0.5f)
                             .padding(start = 4.dp),
                         textAlign = TextAlign.Start,
-                        fontSize = 12.sp,
-                        fontFamily = myFont
-
+                        fontSize = 14.sp,
+                        fontFamily = myFont,
                     )
                     Text(
                         text = data.nameTicher,
@@ -451,18 +520,37 @@ fun ItemProduct(data: DataProduct) {
                             .weight(0.5f)
                             .padding(end = 4.dp),
                         textAlign = TextAlign.End,
-                        fontSize = 15.sp,
-                        fontFamily = myFont
+                        fontSize = 16.sp,
+                        fontFamily = myFont,
 
-                    )
+                        )
                 }
-
+                val zori = String.format("%,d", data.priceOr)
+                Text(
+                    text = zori,
+                    modifier = Modifier
+                        .padding(start = 4.dp),
+                    textAlign = TextAlign.Start,
+                    fontSize = 10.sp,
+                    fontFamily = myFont,
+                    textDecoration = TextDecoration.LineThrough
+                )
             }
 
 
         }
 
 
+    }
+}
+
+private fun darsadfun(price: Int, darsad: Int): String {
+    return if (darsad > 0) {
+        val ee = (price * darsad) / 100
+        val b = price - ee
+        String.format("%,d", b)
+    } else {
+        price.toString()
     }
 }
 
