@@ -1,9 +1,11 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
+import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,16 +40,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -62,6 +68,7 @@ import com.google.gson.Gson
 import ir.hoseinahmadi.daneshjooyarapllication.Navigation.Screen
 import ir.hoseinahmadi.daneshjooyarapllication.R
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.DataProduct
+import ir.hoseinahmadi.daneshjooyarapllication.dataClas.TopTicher
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
 import kotlinx.coroutines.delay
@@ -158,7 +165,7 @@ fun HomeScreen(navController: NavHostController) {
                     "در مقابل، برای توسعه اپلیکیشن\u200Cهای دسکتاپ و حتی وب نیز از وب کراول استفاده می\u200Cشود که پایتون در این مورد بهترین گزینه\u200C است. کتابخانه\u200Cهای متنوع و قدرتمندی در این زبان وجود دارند که در عمل کار شما را برای ساخت یک وب کراولر در پایتون آسان خواهند کرد."
         ),
         DataProduct(
-            12, " دوره آموزش جاوا بهمراه ۲۰ تمرین واقعی",
+            12, "  دوره آموزش جاوا به همراه ۲۰ تمرین واقعی + آموزش شی گرایی",
             "طاها اهوازی", R.drawable.java, 1900000, 40, 20, 31, 85,
             arrayListOf(
                 "آموزش شی گرایی در زبان برنامه نویسی جاوا",
@@ -193,17 +200,23 @@ fun HomeScreen(navController: NavHostController) {
                     "آموزش شغلی: با تکمیل این دوره و اجرای پروژه\u200Cهای مختلف، شما قادر خواهید بود تا به عنوان یک توسعه\u200Cدهنده جاوا اسکریپت وارد بازار کار شوید. این دوره به شما ابزارها، مفاهیم و تکنیک\u200Cهای لازم را در اختیار می\u200Cگذارد تا به عنوان یک حرفه\u200Cای در زمینه جاوا اسکریپت موفق عمل کنید."
         )
     )
+val topTicher = arrayOf(
+    TopTicher(1,"استاد علیرضا احمدی",R.drawable.ali,"متخصص برنامه نویسی موبایل و مدرس"),
+    TopTicher(2,"استاد حامد مودی",R.drawable.modi,"طراح و کدنویس افزونه و قالب وردپرس "),
+    TopTicher(1,"استاد طاها اهوازی",R.drawable.taha,"برنامه نویس فول استک موبایل"),
+)
     Scaffold(
         containerColor = Color.White,
         floatingActionButton = {
             FloatingActionButton(
                 containerColor = Color.White,
                 shape = CircleShape,
-                onClick = { /*TODO*/ }) {
-                Image(painter = painterResource(id = R.drawable.posh),
-                    contentDescription ="",
+                onClick = {}) {
+                Image(
+                    painter = painterResource(id = R.drawable.posh),
+                    contentDescription = "",
                     modifier = Modifier.size(60.dp)
-                    )
+                )
             }
         },
         topBar = { MyTopBarHome() }
@@ -245,7 +258,7 @@ fun HomeScreen(navController: NavHostController) {
                     state = rememberLazyListState(),
                     reverseLayout = true,
                     modifier = Modifier
-                        .background(Color(0xFFC77905))
+                        .background(Color(0xffd6a927))
                         .fillMaxWidth()
                         .padding(vertical = 15.dp)
                         .wrapContentHeight()
@@ -280,6 +293,33 @@ fun HomeScreen(navController: NavHostController) {
                     }
                 }
             }
+            item {
+                LazyRow(
+                    verticalAlignment = Alignment.CenterVertically,
+                    state = rememberLazyListState(),
+                    reverseLayout = true,
+                    modifier = Modifier
+                        .background(dancolor)
+                        .fillMaxWidth()
+                        .padding(vertical = 15.dp)
+                        .wrapContentHeight()
+                ) {
+
+                    item { AmazingTicher() }
+                    itemsIndexed(topTicher){index, item ->
+                        TopTicher(data = item)
+                    }
+                    item { AmazingEndTich() }
+
+                }
+            }
+            item {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(38.dp)
+                )
+            }
         }
 
     }
@@ -297,6 +337,14 @@ fun AmazingStart() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(20.dp))
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(120.dp),
+            painter = painterResource(id = R.drawable.topitem), contentDescription = "",
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+
         Text(
             modifier = Modifier
                 .width(150.dp)
@@ -307,12 +355,37 @@ fun AmazingStart() {
             fontFamily = myFont,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(15.dp))
+    }
+}
+
+@Composable
+fun AmazingTicher() {
+    Column(
+        modifier = Modifier
+            .width(180.dp)
+            .clickable { }
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(105.dp),
-            painter = painterResource(id = R.drawable.box), contentDescription = ""
+                .height(120.dp),
+            painter = painterResource(id = R.drawable.besttich), contentDescription = "",
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+
+        Text(
+            modifier = Modifier
+                .width(170.dp)
+                .height(120.dp),
+            text = "مدرسین برتر",
+            fontSize = 35.sp,
+            color = Color.White,
+            fontFamily = myFont,
+            textAlign = TextAlign.Center
         )
     }
 }
@@ -344,6 +417,46 @@ fun AmazingEnd(navController: NavHostController, route1: String, route2: String)
                             inclusive = true
                         }
                     }
+                }) {
+                    Icon(
+                        Icons.Default.KeyboardArrowLeft,
+                        contentDescription = "",
+                        Modifier.size(40.dp)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = "مشاهده همه",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = myFont
+            )
+        }
+    }
+}
+@Composable
+fun AmazingEndTich() {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White,
+        ),
+        modifier = Modifier
+            .width(180.dp)
+            .height(399.dp)
+            .padding(start = 10.dp, top = 5.dp, end = 5.dp, bottom = 5.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Surface(
+                shape = CircleShape,
+                border = BorderStroke(1.5.dp, Color.Red),
+                color = Color.White
+            ) {
+                IconButton(onClick = {
                 }) {
                     Icon(
                         Icons.Default.KeyboardArrowLeft,
@@ -488,6 +601,8 @@ fun MyTopBarHome() {
 @Composable
 fun MySlider(modifier: Modifier = Modifier) {
     val images = listOf(
+        R.drawable.s,
+        R.drawable.s4,
         R.drawable.p1,
         R.drawable.p2,
         R.drawable.p3,
@@ -508,7 +623,7 @@ fun MySlider(modifier: Modifier = Modifier) {
     Column(
         modifier
             .fillMaxWidth()
-            .wrapContentHeight(),
+            .height(250.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(modifier = modifier.wrapContentSize()) {
@@ -525,7 +640,9 @@ fun MySlider(modifier: Modifier = Modifier) {
                 ) {
                     Image(
                         painter = painterResource(id = images[currentPage]),
-                        contentDescription = ""
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.size(400.dp, 250.dp)
                     )
                 }
             }
@@ -579,7 +696,6 @@ fun MySlider(modifier: Modifier = Modifier) {
 
             }
 
-
         }
 
     }
@@ -621,7 +737,6 @@ fun TopProduct(text: String, navController: NavHostController, route1: String, r
             modifier = Modifier.weight(0.5f),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             TextButton(onClick = {
                 navController.navigate(route1) {
                     popUpTo(route2) {
@@ -690,7 +805,7 @@ fun ItemProduct(data: DataProduct, navController: NavHostController) {
         shape = RoundedCornerShape(5.dp),
         modifier = Modifier
             .width(300.dp)
-            .height(320.dp)
+            .height(310.dp)
             .padding(10.dp)
     ) {
         Column(
@@ -739,9 +854,10 @@ fun ItemProduct(data: DataProduct, navController: NavHostController) {
                     text = data.title,
                     textAlign = TextAlign.End,
                     fontSize = 16.sp,
-                    fontFamily = myFont
+                    fontFamily = myFont,
+                    modifier = Modifier.fillMaxWidth(),
 
-                )
+                    )
                 Text(
                     text = data.nameTicher,
                     modifier = Modifier
@@ -813,6 +929,51 @@ private fun darsadfun(price: Int, darsad: Int): String {
         String.format("%,d", b)
     } else {
         price.toString()
+    }
+}
+
+@Composable
+fun TopTicher(data:TopTicher) {
+    Card(
+        elevation = CardDefaults.cardElevation(15.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        modifier = Modifier
+            .width(250.dp)
+            .height(400.dp)
+            .padding(5.dp)
+    ) {
+        Column(modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.End,
+            ) {
+            Image(
+                modifier = Modifier
+                    .width(250.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .height(300.dp)
+                    .padding(start = 8.dp, end = 8.dp, top = 4.dp),
+                painter = painterResource(id = data.img), contentDescription = "",
+                contentScale = ContentScale.Crop
+            )
+            Text(text = data.name,
+                fontSize = 20.sp,
+                fontFamily = myFont,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(end = 6.dp)
+            )
+              Text(text = data.info,
+                fontSize = 14.sp,
+                fontFamily = myFont,
+                color = Color.Black,
+                  textAlign = TextAlign.End,
+                modifier = Modifier
+                    .padding(end = 6.dp)
+            )
+
+        }
     }
 }
 

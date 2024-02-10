@@ -136,7 +136,6 @@ fun MyTop(navController: NavHostController) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
-
             Text(
                 text = "مشخصات محصول", fontFamily = myFont,
                 fontSize = 20.sp,
@@ -148,6 +147,7 @@ fun MyTop(navController: NavHostController) {
                     tint = Color.Black
                 )
             }
+
         }
         Spacer(
             modifier = Modifier
