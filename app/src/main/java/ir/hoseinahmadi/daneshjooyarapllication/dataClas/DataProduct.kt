@@ -7,5 +7,9 @@ data class DataProduct(
     val img :Int,
     val priceOr:Int,
     val darsad :Int =0,
-    val info :ArrayList<String>
+    val Houre :Int,
+    val student :Int,
+    val jalase :Int,
+    val info :ArrayList<String>,
+    val more:String="",
 )

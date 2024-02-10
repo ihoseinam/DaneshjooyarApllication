@@ -23,6 +23,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,113 +50,102 @@ import com.google.gson.Gson
 import ir.hoseinahmadi.daneshjooyarapllication.Navigation.Screen
 import ir.hoseinahmadi.daneshjooyarapllication.R
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.DataProduct
+import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.tala
 import kotlinx.coroutines.delay
+import org.w3c.dom.Text
+val eeeee = mutableStateOf(1)
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun PackGold(navController: NavHostController) {
-    val myFont = FontFamily(
-        Font(R.font.zori, FontWeight.Medium)
-    )
 
-    var eee by remember {
-        loading
+    var select by remember {
+        eeeee
     }
-
-
-    LaunchedEffect(true) {
-        delay(900)
-        loading.value = false
-    }
-
-    if (eee) {
-        Column(
-            Modifier.fillMaxSize(),
-        ) {
-            Shimer()
-        }
-    } else {
-        Column(modifier = Modifier.fillMaxSize()) {
-            TabRow(
-                selectedTabIndex = if (pack.value) 1 else 0,
-                contentColor = Color.Black,
-                containerColor = Color.White,
+    Column(modifier = Modifier.fillMaxSize()) {
+        TabRow(
+            selectedTabIndex = select,
+            contentColor = Color.Black,
+            containerColor = Color.White,
+        )
+        {
+            Tab(
+                selected = true,
+                text = {
+                    Text(
+                        text = "اساتید طلایی",
+                        fontFamily = myFont
+                    )
+                },
+                onClick = {
+                    pack.value = false
+                    ticher.value = true
+                    eeeee.value = 0
+                },
+                icon = {
+                    if (ticher.value) {
+                        Icon(Icons.Filled.Face, contentDescription = "")
+                    } else {
+                        Icon(Icons.Outlined.Face, contentDescription = "")
+                    }
+                },
+                selectedContentColor = Color.Black,
+                unselectedContentColor = Color.Blue,
             )
-            {
+            Tab(
+                selected = true,
+                text = {
+                    Text(
+                        text = "دوره های طلایی",
+                        fontFamily = myFont
+                    )
+                },
+                onClick = {
+                    pack.value = true
+                    ticher.value = false
+                    eeeee.value =1
+                },
+                icon = {
+                    if (pack.value) {
+                        Icon(Icons.Filled.Email, contentDescription = "")
+                    } else {
+                        Icon(Icons.Outlined.Email, contentDescription = "")
 
-                Tab(
-                    selected = true,
-                    text = {
-                        Text(
-                            text = "اساتید طلایی",
-                            fontFamily = myFont
-                        )
-                    },
-                    onClick = {
-                        pack.value = false
-                        ticher.value = true
-                    },
-                    icon = {
-                        if (ticher.value){
-                            Icon(Icons.Filled.Face, contentDescription ="")
-                        }else{
-                            Icon(Icons.Outlined.Face, contentDescription ="")
-                        }
-                    },
-                    selectedContentColor = Color.Black,
-                    unselectedContentColor = Color.Blue,
-                )
-                Tab(
-                    selected = true,
-                    text = {
-                        Text(
-                            text = "دوره های طلایی",
-                            fontFamily = myFont
-                        )
-                    },
-                    onClick = {
-                        pack.value = true
-                        ticher.value = false
-                    },
-                    icon = {
-                        if (pack.value){
-                            Icon(Icons.Filled.Email, contentDescription ="" )
-                        }else{
-                            Icon(Icons.Outlined.Email, contentDescription ="" )
+                    }
+                },
+                selectedContentColor = Color.Black,
+                unselectedContentColor = Color.Blue,
+            )
 
-                        }
-                    },
-                    selectedContentColor = Color.Black,
-                    unselectedContentColor = Color.Blue,
-                )
-
-            }
-
-            val item = arrayOf(
-                DataProduct(
-                    1,
-                    "جامع ترین دوره آموزش برنامه نویسی اندروید (کاتلین، فلاتر و جاوا)",
-                    "علیرضا احمدی",
-                    R.drawable.androidgold,
-                    125000,
-                    0,
-                   arrayListOf("")
-                ),
+        }
+        val item = arrayOf(
+            DataProduct(
+                1,
+                "جامع ترین دوره آموزش برنامه نویسی اندروید (کاتلین، فلاتر و جاوا)",
+                "علیرضا احمدی",
+                R.drawable.androidgold,
+                125000,
+                50,
+                0, 0, 0,
+                arrayListOf("")
+            ),
 
             )
 
-            pack(navController = navController, item)
-            ticher()
-        }
+        pack(navController = navController, item)
 
+        ticher(navController)
 
     }
+
+
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GoldPackItem(navController: NavHostController, data: DataProduct, font: FontFamily) {
+fun GoldPackItem(navController: NavHostController, data: DataProduct) {
     val datazori = DataProduct(
         data.id,
         data.title,
@@ -162,7 +153,10 @@ fun GoldPackItem(navController: NavHostController, data: DataProduct, font: Font
         data.img,
         data.priceOr,
         data.darsad,
-        data.info
+        data.Houre,
+        data.student,
+        data.jalase,
+        data.info,
     )
     val gson = Gson()
     val itemString = gson.toJson(datazori)
@@ -189,14 +183,14 @@ fun GoldPackItem(navController: NavHostController, data: DataProduct, font: Font
                     color = Color.Black,
                     textAlign = TextAlign.End,
                     text = data.title,
-                    fontFamily = font
+                    fontFamily = myFont
                 )
                 Spacer(modifier = Modifier.height(14.dp))
                 Text(
-                    text = data.nameTicher, fontFamily = font
+                    text = data.nameTicher, fontFamily = myFont
                 )
                 Text(
-                    text = data.priceOr.toString(), fontFamily = font
+                    text = data.priceOr.toString(), fontFamily = myFont
                 )
             }
             Box(
@@ -219,27 +213,10 @@ fun GoldPackItem(navController: NavHostController, data: DataProduct, font: Font
 
 }
 
-var loading = mutableStateOf(true)
-
-@Composable
-private fun Shimer() {
-    var eee by remember {
-        loading
-    }
-    if (eee) {
-        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.shimer))
-        LottieAnimation(composition)
-    }
-
-}
-
 var pack = mutableStateOf(true)
 
 @Composable
 fun pack(navController: NavHostController, data: Array<DataProduct>) {
-    val myFont = FontFamily(
-        Font(R.font.zori, FontWeight.Medium)
-    )
     var ll by remember {
         pack
     }
@@ -249,9 +226,8 @@ fun pack(navController: NavHostController, data: Array<DataProduct>) {
                 .fillMaxSize()
         ) {
             itemsIndexed(data) { index: Int, item: DataProduct ->
-                GoldPackItem(navController, item, myFont)
+                GoldPackItem(navController, item)
             }
-
 
         }
     }
@@ -260,7 +236,7 @@ fun pack(navController: NavHostController, data: Array<DataProduct>) {
 var ticher = mutableStateOf(false)
 
 @Composable
-fun ticher() {
+fun ticher(navController: NavHostController) {
     var bb by remember {
         ticher
     }

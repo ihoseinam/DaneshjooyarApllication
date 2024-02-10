@@ -13,14 +13,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,10 +39,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -53,13 +61,14 @@ fun InfoItem(navController: NavHostController, data: String) {
     Scaffold(
         topBar = { MyTop(navController) },
         bottomBar = {
-                    MyBottomBar(data = dataitem)
+            MyBottomBar(data = dataitem)
         },
         floatingActionButton = {}
     ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color.White)
                 .padding(it),
         ) {
             item {
@@ -72,15 +81,43 @@ fun InfoItem(navController: NavHostController, data: String) {
                     fontWeight = FontWeight.Bold,
                     fontFamily = myFont,
                     textAlign = TextAlign.End,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 8.dp)
                 )
             }
             itemsIndexed(dataitem.info) { index, item ->
                 chiYad(text = item)
             }
+
             item {
-
-
+                Spacer(modifier = Modifier.height(10.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(dancolor)
+                        .wrapContentHeight()
+                        .padding(5.dp)
+                ) {
+                    Text(
+                        text = "درباره این پکیج آموزشی",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(0xFF505A94))
+                            .padding(end = 5.dp),
+                        textAlign = TextAlign.End,
+                        fontFamily = myFont,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp,
+                        color = Color.White
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = dataitem.more, textAlign = TextAlign.End,
+                        fontFamily = myFont,
+                        color = Color.White
+                    )
+                }
             }
         }
 
@@ -89,38 +126,88 @@ fun InfoItem(navController: NavHostController, data: String) {
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTop(navController: NavHostController) {
-    TopAppBar(title = {
-        Text(text = "مشخصات پیکج", fontFamily = myFont)
-    },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.DarkGray,
-            titleContentColor = Color.White,
-            scrolledContainerColor = Color.Red,
-            actionIconContentColor = Color.White
-        ),
-        navigationIcon = {
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
+        ) {
+
+            Text(
+                text = "مشخصات محصول", fontFamily = myFont,
+                fontSize = 20.sp,
+                color = Color.Black
+            )
             IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "")
+                Icon(
+                    Icons.Default.ArrowForward, contentDescription = "",
+                    tint = Color.Black
+                )
             }
         }
-    )
-}
-@Composable
-fun MyBottomBar(data: DataProduct){
-    BottomAppBar(
-        contentPadding = PaddingValues(12.dp)
-    ) {
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "افزودن به سبد خرید")
-        }
-        val priceortakh = darsadfun(data.priceOr, data.darsad)
-        Text(text = priceortakh)
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(3.dp)
+                .background(Color(0x0C6B6969))
+        )
+    }
 
+
+}
+
+@Composable
+fun MyBottomBar(data: DataProduct) {
+    BottomAppBar(
+        contentPadding = PaddingValues(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(Alignment.CenterVertically),
+        tonalElevation = 15.dp
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val priceortakh = darsadfun(data.priceOr, data.darsad)
+            Row {
+                Image(
+                    painter = painterResource(id = R.drawable.toman), contentDescription = "",
+                    modifier = Modifier.size(22.dp)
+                )
+                Spacer(modifier = Modifier.width(3.dp))
+                Text(
+                    text = priceortakh,
+                    fontSize = 20.sp,
+                    fontFamily = myFont,
+                    modifier = Modifier.padding(start = 4.dp)
+                )
+            }
+
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = dancolor,
+                    contentColor = Color.White,
+                ),
+                modifier = Modifier.padding(end = 4.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(
+                    text = "افزودن به سبد خرید",
+                    fontFamily = myFont,
+                )
+            }
+
+        }
     }
 }
+
 private fun darsadfun(price: Int, darsad: Int): String {
     return if (darsad > 0) {
         val ee = (price * darsad) / 100
@@ -135,34 +222,43 @@ private fun darsadfun(price: Int, darsad: Int): String {
 fun chiYad(text: String) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(2.dp),
-        elevation = CardDefaults.cardElevation(13.dp)
+            .padding(start = 10.dp, end = 10.dp, top = 7.dp, bottom = 7.dp)
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = text,
-                fontFamily = myFont)
-            Icon(Icons.Default.Star, contentDescription = "",
-                tint = Color.Blue,
+            Text(
+                text = text,
+                fontFamily = myFont
+            )
+            Spacer(modifier = Modifier.width(3.dp))
+            Icon(
+                Icons.Default.CheckCircle, contentDescription = "",
+                tint = dancolor,
                 modifier = Modifier.size(30.dp)
-                )
+            )
 
         }
     }
 }
 
 @Composable
-fun infoPack(data: DataProduct){
+fun infoPack(data: DataProduct) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(dancolor)
+            .padding(top = 5.dp)
+            .background(dancolor),
+        verticalArrangement = Arrangement.Center
     ) {
         Box(
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.TopCenter
         ) {
             Image(
                 painter = painterResource(id = data.img),
@@ -174,36 +270,44 @@ fun infoPack(data: DataProduct){
             )
         }
 
-        Text(text = data.title,
+        Text(
+            text = data.title,
             fontSize = 20.sp,
             color = Color.White,
             textAlign = TextAlign.End,
             fontFamily = myFont,
-            fontWeight = FontWeight.Bold
-            )
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(end = 5.dp).fillMaxWidth()
+        )
         Spacer(modifier = Modifier.height(20.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(70.dp)
                 .padding(8.dp)
+                .clip(RoundedCornerShape(10.dp))
                 .background(Color(0xFF5365C2)),
-            horizontalArrangement = Arrangement.SpaceAround
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = " ۱۴۵ ساعت",
-                fontSize = 15.sp,
+            Text(
+                text = " ${data.Houre} :ساعت",
+                fontSize = 18.sp,
                 color = Color.White,
                 fontFamily = myFont,
-                )
-            Text(text = "۶۴۸ جلسه",
-                fontSize = 15.sp,
+            )
+            Text(
+                text = " ${data.jalase}:جلسه",
+                fontSize = 18.sp,
                 color = Color.White,
                 fontFamily = myFont,
-                )
-            Text(text = " ۸۱۵ دانشجو",
-                fontSize = 15.sp,
+            )
+            Text(
+                text = "${data.student} :دانشجو ",
+                fontSize = 18.sp,
                 color = Color.White,
                 fontFamily = myFont,
-                )
+            )
         }
     }
 }
