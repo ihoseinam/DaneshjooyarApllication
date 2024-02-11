@@ -1,59 +1,61 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.gson.Gson
 import ir.hoseinahmadi.daneshjooyarapllication.Navigation.Screen
 import ir.hoseinahmadi.daneshjooyarapllication.R
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.DataProduct
+import ir.hoseinahmadi.daneshjooyarapllication.dataClas.TopTicher
+import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
-import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.tala
-import kotlinx.coroutines.delay
-import org.w3c.dom.Text
+
 val eeeee = mutableStateOf(1)
 
 @SuppressLint("UnrememberedMutableState")
@@ -63,7 +65,9 @@ fun PackGold(navController: NavHostController) {
     var select by remember {
         eeeee
     }
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
         TabRow(
             selectedTabIndex = select,
             contentColor = Color.Black,
@@ -104,7 +108,7 @@ fun PackGold(navController: NavHostController) {
                 onClick = {
                     pack.value = true
                     ticher.value = false
-                    eeeee.value =1
+                    eeeee.value = 1
                 },
                 icon = {
                     if (pack.value) {
@@ -119,23 +123,100 @@ fun PackGold(navController: NavHostController) {
             )
 
         }
-        val item = arrayOf(
+        val loveitem = arrayOf(
             DataProduct(
                 1,
-                "جامع ترین دوره آموزش برنامه نویسی اندروید (کاتلین، فلاتر و جاوا)",
+                stringResource(id = R.string.androidTitle),
                 "علیرضا احمدی",
                 R.drawable.androidgold,
-                125000,
-                50,
-                0, 0, 0,
-                arrayListOf("")
+                6900000,
+                60,
+                150,
+                815,
+                350,
+                arrayListOf(
+                    stringResource(id = R.string.an1),
+                    stringResource(id = R.string.an2),
+                    stringResource(id = R.string.an3),
+                    stringResource(id = R.string.an4),
+                    stringResource(id = R.string.an5),
+                    stringResource(id = R.string.an6),
+                    stringResource(id = R.string.an7),
+                ),
+                "دوره آموزش اندروید از مقدمات شروع میشه. لازم نیست چیزی یاد داشته باشی رفیق. همینکه بتونی سیستم رو خاموش روشن کنی یا یه سرچ ساده تو گوگل انجام بدی کافیه. میدونی که سیستم عامل اندروید الان 80 درصد بازار گوشی های موبایل رو به خودش اختصاص داده و در تمام ابزارهایی مثل تلویزیون، ساعت هوشمند، عینک و حتی یخچال ها هم مورد استفاده قرار میگیره. البته با فلاتر و جت پک کامپوز میتونی خروجی ویندوز و IOS هم بگیری که این فریمورک ها هم در همین دوره، آموزش داده میشه. پس بازار کار خیلی بزرگی رو پیش روی خودت تصور کن.\n" +
+                        "\n" +
+                        "سخن مدرس: اگر تضمین کنی که طبق برنامه من پیش بیای و دوره رو ببینی، منم تضمین میکنم که تبدیل به یک برنامه نویس اندروید بشی.\n" +
+                        "\n" +
+                        "اینکه توانایی استفاده از گوشی های اندرویدی رو داری عالیه، اما سبب کسب درآمد تو از این حوزه نمیشه. تو الان فقط یک مصرف کننده از سیستم عامل اندروید هستی. من قصد دارم تو رو از یک مصرف کننده ساده، تبدیل به یک توسعه دهنده\u200E\u200Cی توانمند در حوزه برنامه نویسی اندروید کنم. پس با استفاده از آموزش برنامه نویسی اندروید میتونی هر اپلیکیشنی که مدنظرت هست رو پیاده سازی کنی. اگر قصد مهاجرت داری؛ اگر به فکر استخدام در شرکت های بزرگ ایران نظیر دیجی کالا، سروش، اسنپ، دیوار و غیره هستی یا اگر ایده شخصی داری و میخوای نرم\u200Cافزاری اختصاصی پیاده سازی کنی، به آموزش اندروید خوش اومدی."
+            ),
+            DataProduct(
+                2,
+                stringResource(id = R.string.afzoneTitle),
+                "حامد مودی",
+                R.drawable.word,
+                1299000,
+                40,
+                17, 422, 72,
+                arrayListOf(
+                    stringResource(id = R.string.git1),
+                    stringResource(id = R.string.git2),
+                    stringResource(id = R.string.git3),
+                    stringResource(id = R.string.git4),
+                    stringResource(id = R.string.git5),
+                ),
+                "Git متداول\u200Cترین سیستم سورس کنترل است. Git نرم افزاری است که به صورت محلی اجرا شده و پرونده\u200Cها و تاریخچه آن\u200Cها را در رایانه شما ذخیره می\u200Cکند. با این وجود دیگر نگران از دست دادن اطلاعات و سورس کد های خود نخواهید بود. با استفاده از گیت همچنین می\u200Cتوانید از گیت هاب GitHub برای ذخیره یک کپی از پرونده\u200Cها و سابقه ویرایش آن\u200Cها استفاده کنید. بستری جذاب برای برنامه نویس ها برای به اشتراک گذاشتن سورس خود با دیگران و استفاده از سورس دیگران و تجریه های برنامه نویسی آن ها است.\n" +
+                        "\n" +
+                        "Git می\u200Cتواند تغییرات را به طور خودکار ادغام کند، به عنوان مثال دو نفر می\u200Cتوانند در قسمت\u200Cهای مختلف یک فایل کار کنند و بعدا بدون تغییر کار یکدیگر، آن تغییرات را ادغام کنند! بنابراین صرف نظر از اینکه شما کدی را به تنهایی\u200C می\u200Cنویسید یا در قالب یک تیم کار می\u200Cکنید، آموزش جامع Git برای شما مفید خواهد بود."
+            ),
+            DataProduct(
+                2,
+                stringResource(id = R.string.afzoneTitle),
+                "حامد مودی",
+                R.drawable.word,
+                1299000,
+                40,
+                17, 422, 72,
+                arrayListOf(
+                    stringResource(id = R.string.git1),
+                    stringResource(id = R.string.git2),
+                    stringResource(id = R.string.git3),
+                    stringResource(id = R.string.git4),
+                    stringResource(id = R.string.git5),
+                ),
+                "Git متداول\u200Cترین سیستم سورس کنترل است. Git نرم افزاری است که به صورت محلی اجرا شده و پرونده\u200Cها و تاریخچه آن\u200Cها را در رایانه شما ذخیره می\u200Cکند. با این وجود دیگر نگران از دست دادن اطلاعات و سورس کد های خود نخواهید بود. با استفاده از گیت همچنین می\u200Cتوانید از گیت هاب GitHub برای ذخیره یک کپی از پرونده\u200Cها و سابقه ویرایش آن\u200Cها استفاده کنید. بستری جذاب برای برنامه نویس ها برای به اشتراک گذاشتن سورس خود با دیگران و استفاده از سورس دیگران و تجریه های برنامه نویسی آن ها است.\n" +
+                        "\n" +
+                        "Git می\u200Cتواند تغییرات را به طور خودکار ادغام کند، به عنوان مثال دو نفر می\u200Cتوانند در قسمت\u200Cهای مختلف یک فایل کار کنند و بعدا بدون تغییر کار یکدیگر، آن تغییرات را ادغام کنند! بنابراین صرف نظر از اینکه شما کدی را به تنهایی\u200C می\u200Cنویسید یا در قالب یک تیم کار می\u200Cکنید، آموزش جامع Git برای شما مفید خواهد بود."
+            ),
+            DataProduct(
+                2,
+                stringResource(id = R.string.afzoneTitle),
+                "حامد مودی",
+                R.drawable.word,
+                1299000,
+                40,
+                17, 422, 72,
+                arrayListOf(
+                    stringResource(id = R.string.git1),
+                    stringResource(id = R.string.git2),
+                    stringResource(id = R.string.git3),
+                    stringResource(id = R.string.git4),
+                    stringResource(id = R.string.git5),
+                ),
+                "Git متداول\u200Cترین سیستم سورس کنترل است. Git نرم افزاری است که به صورت محلی اجرا شده و پرونده\u200Cها و تاریخچه آن\u200Cها را در رایانه شما ذخیره می\u200Cکند. با این وجود دیگر نگران از دست دادن اطلاعات و سورس کد های خود نخواهید بود. با استفاده از گیت همچنین می\u200Cتوانید از گیت هاب GitHub برای ذخیره یک کپی از پرونده\u200Cها و سابقه ویرایش آن\u200Cها استفاده کنید. بستری جذاب برای برنامه نویس ها برای به اشتراک گذاشتن سورس خود با دیگران و استفاده از سورس دیگران و تجریه های برنامه نویسی آن ها است.\n" +
+                        "\n" +
+                        "Git می\u200Cتواند تغییرات را به طور خودکار ادغام کند، به عنوان مثال دو نفر می\u200Cتوانند در قسمت\u200Cهای مختلف یک فایل کار کنند و بعدا بدون تغییر کار یکدیگر، آن تغییرات را ادغام کنند! بنابراین صرف نظر از اینکه شما کدی را به تنهایی\u200C می\u200Cنویسید یا در قالب یک تیم کار می\u200Cکنید، آموزش جامع Git برای شما مفید خواهد بود."
             ),
 
             )
+        val topTicher = arrayOf(
+            TopTicher(1, "استاد علیرضا احمدی", R.drawable.ali, "متخصص برنامه نویسی موبایل و مدرس"),
+            TopTicher(2, "استاد حامد مودی", R.drawable.modi, "طراح و کدنویس افزونه و قالب وردپرس "),
+            TopTicher(1, "استاد طاها اهوازی", R.drawable.taha, "برنامه نویس فول استک موبایل"),
+        )
 
-        pack(navController = navController, item)
+        pack(navController, loveitem)
 
-        ticher(navController)
+        ticher(topTicher)
 
     }
 
@@ -164,21 +245,21 @@ fun GoldPackItem(navController: NavHostController, data: DataProduct) {
         onClick = {
             navController.navigate(Screen.InfoItemScreen.route + "?data=${itemString}")
         },
-        border = BorderStroke(1.dp, tala),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 2.dp)
+            .padding(3.dp)
     ) {
         Row(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
-                    .weight(0.7f)
+                    .weight(0.5f)
                     .fillMaxSize(),
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.End,
             ) {
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    fontSize = 16.sp,
+                    fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
                     textAlign = TextAlign.End,
@@ -193,24 +274,164 @@ fun GoldPackItem(navController: NavHostController, data: DataProduct) {
                     text = data.priceOr.toString(), fontFamily = myFont
                 )
             }
-            Box(
+            Image(
                 modifier = Modifier
-                    .weight(0.4f)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.BottomCenter,
-            ) {
-                Image(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp)
-                        .align(Alignment.Center),
-                    painter = painterResource(id = data.img),
-                    contentDescription = ""
-                )
-            }
+                    .width(200.dp)
+                    .height(140.dp)
+                    .clip(RoundedCornerShape(15.dp))
+                    .weight(0.5f)
+                    .padding(4.dp),
+                contentScale = ContentScale.Crop,
+                painter = painterResource(id = data.img),
+                contentDescription = ""
+            )
+
         }
     }
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ItemGold(navController: NavHostController, data: DataProduct) {
+    val zori = DataProduct(
+        data.id,
+        data.title,
+        data.nameTicher,
+        data.img,
+        data.priceOr,
+        data.darsad,
+        data.Houre,
+        data.student,
+        data.jalase,
+        data.info,
+        data.more
+    )
+    val gson = Gson()
+    val itemstring = gson.toJson(zori)
+    Card(
+        elevation = CardDefaults.cardElevation(15.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        onClick = {
+            navController.navigate(Screen.InfoItemScreen.route + "?data=${itemstring}")
+        },
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier
+            .fillMaxWidth(0.5f)
+            .height(300.dp)
+            .padding(start = 3.dp, top = 5.dp, end = 3.dp, bottom = 5.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.End
+        ) {
+            Image(
+                painter = painterResource(id = data.img), contentDescription = "",
+                Modifier
+                    .width(220.dp)
+                    .height(140.dp)
+                    .padding(8.dp),
+                contentScale = ContentScale.Crop
+            )
+
+            Text(
+                text = data.title,
+                fontFamily = myFont,
+                fontSize = 16.sp,
+                textAlign = TextAlign.End,
+                modifier = Modifier.padding(end = 5.dp, start = 1.dp)
+            )
+            Spacer(modifier = Modifier.height(5.dp))
+
+            Text(
+                text = data.nameTicher,
+                fontFamily = myFont,
+                fontSize = 14.sp,
+                color = dancolor,
+                textAlign = TextAlign.End,
+                modifier = Modifier.padding(end = 5.dp)
+            )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .background(Color(0x0F5A5959))
+            )
+            Row(
+                modifier = Modifier.padding(start = 6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.toman),
+                    contentDescription = "",
+                    Modifier.size(23.dp)
+                )
+                Text(
+                    text = darsadfun(data.priceOr, data.darsad),
+                    fontFamily = myFont,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Start,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(start = 5.dp)
+                        .fillMaxWidth()
+                )
+            }
+
+        }
+    }
+}
+@Composable
+fun TopTicherTab(data: TopTicher) {
+    Card(
+        elevation = CardDefaults.cardElevation(15.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        modifier = Modifier
+            .fillMaxWidth(0.5f)
+            .height(410.dp)
+            .clickable {  }
+            .padding(2.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.End,
+        ) {
+            Image(
+                modifier = Modifier
+                    .width(240.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .height(300.dp)
+                    .padding(start = 8.dp, end = 8.dp, top = 4.dp),
+                painter = painterResource(id = data.img), contentDescription = "",
+                contentScale = ContentScale.Crop
+            )
+            Text(
+                text = data.name,
+                fontSize = 20.sp,
+                fontFamily = myFont,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(end = 6.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = data.info,
+                fontSize = 14.sp,
+                fontFamily = myFont,
+                color = Color.Black,
+                textAlign = TextAlign.End,
+                modifier = Modifier
+                    .padding(end = 6.dp)
+            )
+
+        }
+    }
 }
 
 var pack = mutableStateOf(true)
@@ -221,29 +442,48 @@ fun pack(navController: NavHostController, data: Array<DataProduct>) {
         pack
     }
     if (ll) {
-        LazyColumn(
+        LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxSize()
-        ) {
-            itemsIndexed(data) { index: Int, item: DataProduct ->
-                GoldPackItem(navController, item)
+                .background(Color(0xffd6a927)),
+            columns = GridCells.Adaptive(180.dp),
+            contentPadding = PaddingValues(3.dp),
+            content = {
+                itemsIndexed(data) { index, item ->
+                    ItemGold(
+                        navController = navController, data = item
+                    )
+                }
             }
+        )
 
-        }
     }
 }
+
 
 var ticher = mutableStateOf(false)
 
 @Composable
-fun ticher(navController: NavHostController) {
+fun ticher( topTicher: Array<TopTicher>) {
     var bb by remember {
         ticher
     }
     if (bb) {
-        Column {
-            Text(text = "dhudfh")
-        }
+       LazyVerticalGrid(columns = GridCells.Adaptive(180.dp), contentPadding = PaddingValues(4.dp), content ={
+           itemsIndexed(topTicher){index: Int, item: TopTicher ->
+               TopTicherTab(data = item)
+           }
+       } )
     }
 
+}
+
+private fun darsadfun(price: Int, darsad: Int): String {
+    return if (darsad > 0) {
+        val ee = (price * darsad) / 100
+        val b = price - ee
+        String.format("%,d", b)
+    } else {
+        price.toString()
+    }
 }

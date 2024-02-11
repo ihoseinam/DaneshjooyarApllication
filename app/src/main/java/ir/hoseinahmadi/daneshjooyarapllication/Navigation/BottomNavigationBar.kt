@@ -1,6 +1,11 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Navigation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -68,37 +73,47 @@ fun BottomNavigationBar(
     val backStackEntry = navController.currentBackStackEntryAsState()
     val showBottomBar = backStackEntry.value?.destination?.route in item.map { it.route }
     if (showBottomBar) {
-        NavigationBar(
-            modifier = Modifier.background(Color.White) .clip(RoundedCornerShape(15.dp)),
-            tonalElevation = 10.dp,
-        ) {
-            item.forEachIndexed { index, item ->
-                val selected = item.route == backStackEntry.value?.destination?.route
-                NavigationBarItem(
-                    selected = selected,
-                    onClick = { onItemClick(item) },
-                    colors = NavigationBarItemDefaults.colors(
-                        unselectedIconColor = Color(0xFF8D8B8B),
-                        unselectedTextColor = Color(0xFF999898),
-                        selectedIconColor = Color(0xFF000000),
-                        selectedTextColor = Color(0xFF000000),
-                        indicatorColor = Color(0xFFB3C9DC)
-                    ),
-                    icon = {
-                        if (selected) {
-                            Icon(item.selectedIcon, contentDescription = "")
-                        } else {
-                            Icon(item.deselectedIcon, contentDescription = "")
-                        }
-                    },
-                    label = {
-                        Text(text = item.name,
-                            fontFamily = myFont,
-                            )
+        Column {
+            Spacer(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color(0x0F626161)))
+            Row {
+                NavigationBar(
+                    modifier = Modifier
+                        .background(Color.White)
+                        .clip(RoundedCornerShape(15.dp)),
+                    tonalElevation = 15.dp,
+                    containerColor = Color(0xFFFFFFFF),
+                ) {
+
+                    item.forEachIndexed { index, item ->
+                        val selected = item.route == backStackEntry.value?.destination?.route
+                        NavigationBarItem(
+                            selected = selected,
+                            onClick = { onItemClick(item) },
+                            colors = NavigationBarItemDefaults.colors(
+                                unselectedIconColor = Color(0xFF8D8B8B),
+                                unselectedTextColor = Color(0xFF999898),
+                                selectedIconColor = Color(0xFF000000),
+                                selectedTextColor = Color(0xFF000000),
+                                indicatorColor = Color(0xFFBCDAF4)
+                            ),
+                            icon = {
+                                if (selected) {
+                                    Icon(item.selectedIcon, contentDescription = "")
+                                } else {
+                                    Icon(item.deselectedIcon, contentDescription = "")
+                                }
+                            },
+                            label = {
+                                Text(text = item.name,
+                                    fontFamily = myFont,
+                                )
+                            }
+                        )
                     }
-                )
+                }
             }
         }
+
 
     }
 }

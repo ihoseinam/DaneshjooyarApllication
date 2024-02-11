@@ -1,6 +1,5 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
-import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -27,33 +26,27 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -125,26 +118,6 @@ fun HomeScreen(navController: NavHostController) {
         )
     val newite = arrayOf(
         DataProduct(
-            10,
-            "آموزش ووکامرس رایگان | ایجاد سایت فروشگاهی با وردپرس",
-            "علیرضا احمدی",
-            R.drawable.wooo,
-            1000000,
-            100,
-            5,
-            28,
-            41,
-            arrayListOf(
-                "نصب ووکامرس بر روی وردپرس",
-                "کانفیگ حمل و نقل و مالیات",
-                "بازاریابی و تجزیه و تحلیل",
-                "نصب قالب مورد نیاز بر روی وردپرس",
-                "محصول گذاری متغییر",
-                "نصب و پیکربندی افزونه ووکامرس فارسی",
-            ),
-            "در این آموزش قصد داریم تا یک فروشگاه اینترنتی را از صفر بوسیله افزونه ووکامرس پیاده سازی کنیم. پس از گذراندن دوره آموزش ووکامرس، شما قادر به پیاده سازی یک فروشگاه اینترنتی کاملا حرفه ای در سیستم مدیریت محتوای وردپرس خواهید بود. فروشگاهی که امکان ایجاد محصول، قیمت گذاری و رفتن به درگاه پرداخت را برای شما فراهم میکند. در این دوره آموزش طراحی سایت فروشگاهی با وردپرس از افزونه رسمی ووکامرس استفاده شده ولی شما قادر به پیاده سازی هر فروشگاهی با هر قالبی در وردپرس خواهید بود."
-        ),
-        DataProduct(
             11, "آموزش ساخت خزنده وب با پایتون (خزش در صفحات دیجی کالا)",
             "علی رستمی",
             R.drawable.khaz,
@@ -200,11 +173,67 @@ fun HomeScreen(navController: NavHostController) {
                     "آموزش شغلی: با تکمیل این دوره و اجرای پروژه\u200Cهای مختلف، شما قادر خواهید بود تا به عنوان یک توسعه\u200Cدهنده جاوا اسکریپت وارد بازار کار شوید. این دوره به شما ابزارها، مفاهیم و تکنیک\u200Cهای لازم را در اختیار می\u200Cگذارد تا به عنوان یک حرفه\u200Cای در زمینه جاوا اسکریپت موفق عمل کنید."
         )
     )
-val topTicher = arrayOf(
-    TopTicher(1,"استاد علیرضا احمدی",R.drawable.ali,"متخصص برنامه نویسی موبایل و مدرس"),
-    TopTicher(2,"استاد حامد مودی",R.drawable.modi,"طراح و کدنویس افزونه و قالب وردپرس "),
-    TopTicher(1,"استاد طاها اهوازی",R.drawable.taha,"برنامه نویس فول استک موبایل"),
-)
+    val topTicher = arrayOf(
+        TopTicher(1, "استاد علیرضا احمدی", R.drawable.ali, "متخصص برنامه نویسی موبایل و مدرس"),
+        TopTicher(2, "استاد حامد مودی", R.drawable.modi, "طراح و کدنویس افزونه و قالب وردپرس "),
+        TopTicher(1, "استاد طاها اهوازی", R.drawable.taha, "برنامه نویس فول استک موبایل"),
+    )
+    val freePack = arrayOf(
+        DataProduct(
+            31,
+            "آموزش ووکامرس رایگان | ایجاد سایت فروشگاهی با وردپرس",
+            "علیرضا احمدی",
+            R.drawable.wooo,
+            1000000,
+            100,
+            5,
+            28,
+            41,
+            arrayListOf(
+                "نصب ووکامرس بر روی وردپرس",
+                "کانفیگ حمل و نقل و مالیات",
+                "بازاریابی و تجزیه و تحلیل",
+                "نصب قالب مورد نیاز بر روی وردپرس",
+                "محصول گذاری متغییر",
+                "نصب و پیکربندی افزونه ووکامرس فارسی",
+            ),
+            "در این آموزش قصد داریم تا یک فروشگاه اینترنتی را از صفر بوسیله افزونه ووکامرس پیاده سازی کنیم. پس از گذراندن دوره آموزش ووکامرس، شما قادر به پیاده سازی یک فروشگاه اینترنتی کاملا حرفه ای در سیستم مدیریت محتوای وردپرس خواهید بود. فروشگاهی که امکان ایجاد محصول، قیمت گذاری و رفتن به درگاه پرداخت را برای شما فراهم میکند. در این دوره آموزش طراحی سایت فروشگاهی با وردپرس از افزونه رسمی ووکامرس استفاده شده ولی شما قادر به پیاده سازی هر فروشگاهی با هر قالبی در وردپرس خواهید بود."
+        ),
+        DataProduct(
+            32,
+            "آموزش وردپرس رایگان(پروژه ساخت سایت خبری)",
+            "",
+            R.drawable.wordpres,
+            0,
+            0,
+            11,
+            426,
+            64,
+            arrayListOf(
+                "آموزش نصب وردپرس بر روی لوکال هاست",
+                "نحوه بروزرسانی وردپرس و افزونه ها",
+                "نحوه انتشار نوشته ها در وردپرس",
+                "دسته بندی کردن نوشته ها در وردپرس",
+                "آموزش کار با برگه ها در وردپرس",
+                "کار با قالب های وردپرس",
+            ),
+            "وردپرس یک سیستم مدیریت محتوای کاملا رایگان و متن باز است. شما با آموزش وردپرس رایگان، هر نوع وبسایتی را میتوانید پیاده سازی کنید. هر نوع؟ بله هر نوع وبسایتی! مثال بزنم؟ خوب همین وبسایت دانشجویار با وردپرس پیاده سازی شده. درسته که در دانشجویار کدنویسی اختصاصی انجام میشه (افزونه نویسی و قالب نویسی) اما در اصل موضوع که سایت بر روی سیستم وردپرس هست، تفاوتی ایجاد نمیکنه.\n" +
+                    "\n" +
+                    "پس با وردپرس میتونید سایت خبری، فروشگاهی، آموزشی، رزومه شخصی، شرکتی و حتی وبسایت هایی مشابه دیجی کالا، دیوار و باسلام رو ایجاد و پیاده سازی کنید. اما قبل از اینکه به فکر پیاده سازی بیوفتید، کمی صبر کنید. پیش از شروع هر کاری باید مهارت لازم رو کسب کرد. پس به دوره آموزش WordPress رایگان، خوش اومدین؛ جایی که قراره از نصب تا راه اندازی قالب خبری در وردپرس، بهتون آموزش داده بشه."
+        ),
+        DataProduct(
+            33, "آموزش گرامر زبان انگلیسی ( یادگیری از صفر )", "تینا ظهوری", R.drawable.gramer,
+            0, 0, 0, 0, 0,
+            arrayListOf(
+                "گرامر حال ساده (Present Simple Tense)",
+                "گرامر گذشته ساده (Past Simple Tense)",
+                "گرامر آینده ساده با استفاده از will (Future Simple Tense)",
+                "گرامر آینده ساده با استفاده از be going to (Future Simple Tense)",
+                "گرامر حال استمراری (Present continuous Tense)",
+            ), ""
+        )
+
+    )
     Scaffold(
         containerColor = Color.White,
         floatingActionButton = {
@@ -232,12 +261,7 @@ val topTicher = arrayOf(
                 MySlider()
             }
             item {
-                TopProduct(
-                    text = "جدید ترین ها",
-                    navController,
-                    Screen.PackGold.route,
-                    Screen.Home.route
-                )
+                TopProduct(text = "جدید ترین ها")
                 LazyRow(
                     reverseLayout = true,
                     modifier = Modifier
@@ -275,12 +299,7 @@ val topTicher = arrayOf(
             }
             item {
                 Spacer(modifier = Modifier.height(20.dp))
-                TopProduct(
-                    text = "محبوب ترین ها",
-                    navController,
-                    Screen.PackGold.route,
-                    Screen.Home.route
-                )
+                TopProduct(text = "محبوب ترین ها")
                 LazyRow(
                     reverseLayout = true,
                     modifier = Modifier
@@ -306,20 +325,30 @@ val topTicher = arrayOf(
                 ) {
 
                     item { AmazingTicher() }
-                    itemsIndexed(topTicher){index, item ->
+                    itemsIndexed(topTicher) { index, item ->
                         TopTicher(data = item)
                     }
-                    item { AmazingEndTich() }
+                    item { AmazingEndTich(navController) }
 
                 }
             }
             item {
-                Spacer(
+                Spacer(modifier = Modifier.height(10.dp))
+                TopProduct(text = "دوره های رایگان")
+                LazyRow(
+                    reverseLayout = true,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(38.dp)
-                )
+                        .padding(3.dp)
+                        .wrapContentHeight()
+                ) {
+                    itemsIndexed(freePack) { index, item ->
+                        FreeItem(data = item, navController)
+                    }
+                }
             }
+
+
         }
 
     }
@@ -362,7 +391,7 @@ fun AmazingStart() {
 fun AmazingTicher() {
     Column(
         modifier = Modifier
-            .width(180.dp)
+            .width(190.dp)
             .clickable { }
             .fillMaxHeight(),
         verticalArrangement = Arrangement.Center,
@@ -371,8 +400,8 @@ fun AmazingTicher() {
         Spacer(modifier = Modifier.height(20.dp))
         Image(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp),
+                .width(190.dp)
+                .height(140.dp),
             painter = painterResource(id = R.drawable.besttich), contentDescription = "",
         )
         Spacer(modifier = Modifier.height(15.dp))
@@ -412,6 +441,9 @@ fun AmazingEnd(navController: NavHostController, route1: String, route2: String)
                 color = Color.White
             ) {
                 IconButton(onClick = {
+                    eeeee.value = 1
+                    pack.value = true
+                    ticher.value = false
                     navController.navigate(route1) {
                         popUpTo(route2) {
                             inclusive = true
@@ -435,8 +467,10 @@ fun AmazingEnd(navController: NavHostController, route1: String, route2: String)
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AmazingEndTich() {
+fun AmazingEndTich(navController: NavHostController) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
@@ -457,6 +491,14 @@ fun AmazingEndTich() {
                 color = Color.White
             ) {
                 IconButton(onClick = {
+                    eeeee.value = 0
+                    pack.value = false
+                    ticher.value = true
+                    navController.navigate(Screen.PackGold.route) {
+                        popUpTo(Screen.Home.route) {
+                            inclusive = true
+                        }
+                    }
                 }) {
                     Icon(
                         Icons.Default.KeyboardArrowLeft,
@@ -543,7 +585,7 @@ fun AmazingItem(navController: NavHostController, data: DataProduct) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(2.dp)
-                    .background(Color(0xfffffff))
+                    .background(Color(0x0F5A5959))
             )
             Row(
                 modifier = Modifier.padding(start = 6.dp),
@@ -728,21 +770,16 @@ fun IndicatorDots(isSelected: Boolean, modifier: Modifier) {
 }
 
 @Composable
-fun TopProduct(text: String, navController: NavHostController, route1: String, route2: String) {
+fun TopProduct(text: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
             modifier = Modifier.weight(0.5f),
-            verticalAlignment = Alignment.CenterVertically
         ) {
             TextButton(onClick = {
-                navController.navigate(route1) {
-                    popUpTo(route2) {
-                        inclusive = true
-                    }
-                }
             }) {
                 Icon(
                     Icons.Filled.KeyboardArrowLeft,
@@ -814,23 +851,19 @@ fun ItemProduct(data: DataProduct, navController: NavHostController) {
                 .padding(8.dp)
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(0.6f),
                 contentAlignment = Alignment.TopCenter
             ) {
                 Image(
-                    painter = painterResource(id = data.img),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(10.dp))
-                        .padding(2.dp),
+                    painter = painterResource(id = data.img), contentDescription = "",
+                    Modifier
+                        .width(270.dp)
+                        .height(160.dp),
+                    contentScale = ContentScale.Crop
                 )
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 5.dp, start = 10.dp), contentAlignment = Alignment.TopStart
+                        .padding(top = 5.dp, start = 4.dp), contentAlignment = Alignment.TopStart
                 ) {
                     Text(
                         text = "${data.darsad} %",
@@ -922,6 +955,87 @@ fun ItemProduct(data: DataProduct, navController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FreeItem(data: DataProduct, navController: NavHostController) {
+    val zori = DataProduct(
+        data.id,
+        data.title,
+        data.nameTicher,
+        data.img,
+        data.priceOr,
+        data.darsad,
+        data.Houre,
+        data.student,
+        data.jalase,
+        data.info,
+        data.more
+    )
+    val gson = Gson()
+    val itemstring = gson.toJson(zori)
+    Card(
+        onClick = {
+            navController.navigate(Screen.InfoItemScreen.route + "?data=${itemstring}")
+        },
+        elevation = CardDefaults.cardElevation(15.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        modifier = Modifier
+            .width(285.dp)
+            .height(300.dp)
+            .padding(8.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 5.dp)
+        ) {
+            Image(
+                painter = painterResource(id = data.img), contentDescription = "",
+                Modifier
+                    .width(270.dp)
+                    .padding(top = 5.dp)
+                    .height(160.dp),
+                contentScale = ContentScale.Crop
+            )
+            Text(
+                text = data.title,
+                fontFamily = myFont,
+                fontSize = 16.sp,
+                textAlign = TextAlign.End,
+                color = Color.Black,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = data.nameTicher,
+                fontFamily = myFont,
+                fontSize = 15.sp,
+                color = dancolor,
+                textAlign = TextAlign.End,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .background(Color(0x0F626060))
+            )
+            Text(
+                text = "رایگان",
+                fontFamily = myFont,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 4.dp),
+                color = Color.Black
+            )
+        }
+    }
+}
+
 private fun darsadfun(price: Int, darsad: Int): String {
     return if (darsad > 0) {
         val ee = (price * darsad) / 100
@@ -933,7 +1047,7 @@ private fun darsadfun(price: Int, darsad: Int): String {
 }
 
 @Composable
-fun TopTicher(data:TopTicher) {
+fun TopTicher(data: TopTicher) {
     Card(
         elevation = CardDefaults.cardElevation(15.dp),
         colors = CardDefaults.cardColors(
@@ -944,9 +1058,10 @@ fun TopTicher(data:TopTicher) {
             .height(400.dp)
             .padding(5.dp)
     ) {
-        Column(modifier = Modifier.fillMaxSize(),
+        Column(
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.End,
-            ) {
+        ) {
             Image(
                 modifier = Modifier
                     .width(250.dp)
@@ -956,7 +1071,8 @@ fun TopTicher(data:TopTicher) {
                 painter = painterResource(id = data.img), contentDescription = "",
                 contentScale = ContentScale.Crop
             )
-            Text(text = data.name,
+            Text(
+                text = data.name,
                 fontSize = 20.sp,
                 fontFamily = myFont,
                 color = Color.Black,
@@ -964,11 +1080,12 @@ fun TopTicher(data:TopTicher) {
                 modifier = Modifier
                     .padding(end = 6.dp)
             )
-              Text(text = data.info,
+            Text(
+                text = data.info,
                 fontSize = 14.sp,
                 fontFamily = myFont,
                 color = Color.Black,
-                  textAlign = TextAlign.End,
+                textAlign = TextAlign.End,
                 modifier = Modifier
                     .padding(end = 6.dp)
             )

@@ -54,7 +54,7 @@ fun Splash() {
             modifier = Modifier
                 .size(250.dp)
                 .background(Color.White),
-            painter = painterResource(id = R.drawable.logotype),
+            painter = painterResource(id = R.drawable.dansplash),
             contentDescription = "",
         )
         Box(
