@@ -8,6 +8,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -46,6 +48,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -60,6 +63,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.gson.Gson
 import ir.hoseinahmadi.daneshjooyarapllication.Navigation.Screen
 import ir.hoseinahmadi.daneshjooyarapllication.R
+import ir.hoseinahmadi.daneshjooyarapllication.dataClas.Category
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.DataProduct
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.TopTicher
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
@@ -93,7 +97,8 @@ fun HomeScreen(navController: NavHostController) {
                     "\n" +
                     "سخن مدرس: اگر تضمین کنی که طبق برنامه من پیش بیای و دوره رو ببینی، منم تضمین میکنم که تبدیل به یک برنامه نویس اندروید بشی.\n" +
                     "\n" +
-                    "اینکه توانایی استفاده از گوشی های اندرویدی رو داری عالیه، اما سبب کسب درآمد تو از این حوزه نمیشه. تو الان فقط یک مصرف کننده از سیستم عامل اندروید هستی. من قصد دارم تو رو از یک مصرف کننده ساده، تبدیل به یک توسعه دهنده\u200E\u200Cی توانمند در حوزه برنامه نویسی اندروید کنم. پس با استفاده از آموزش برنامه نویسی اندروید میتونی هر اپلیکیشنی که مدنظرت هست رو پیاده سازی کنی. اگر قصد مهاجرت داری؛ اگر به فکر استخدام در شرکت های بزرگ ایران نظیر دیجی کالا، سروش، اسنپ، دیوار و غیره هستی یا اگر ایده شخصی داری و میخوای نرم\u200Cافزاری اختصاصی پیاده سازی کنی، به آموزش اندروید خوش اومدی."
+                    "اینکه توانایی استفاده از گوشی های اندرویدی رو داری عالیه، اما سبب کسب درآمد تو از این حوزه نمیشه. تو الان فقط یک مصرف کننده از سیستم عامل اندروید هستی. من قصد دارم تو رو از یک مصرف کننده ساده، تبدیل به یک توسعه دهنده\u200E\u200Cی توانمند در حوزه برنامه نویسی اندروید کنم. پس با استفاده از آموزش برنامه نویسی اندروید میتونی هر اپلیکیشنی که مدنظرت هست رو پیاده سازی کنی. اگر قصد مهاجرت داری؛ اگر به فکر استخدام در شرکت های بزرگ ایران نظیر دیجی کالا، سروش، اسنپ، دیوار و غیره هستی یا اگر ایده شخصی داری و میخوای نرم\u200Cافزاری اختصاصی پیاده سازی کنی، به آموزش اندروید خوش اومدی.",
+            "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/Demo-Android.mp4"
         ),
         DataProduct(
             2,
@@ -102,7 +107,9 @@ fun HomeScreen(navController: NavHostController) {
             R.drawable.word,
             1299000,
             40,
-            17, 422, 72,
+            17,
+            422,
+            72,
             arrayListOf(
                 stringResource(id = R.string.git1),
                 stringResource(id = R.string.git2),
@@ -112,17 +119,22 @@ fun HomeScreen(navController: NavHostController) {
             ),
             "Git متداول\u200Cترین سیستم سورس کنترل است. Git نرم افزاری است که به صورت محلی اجرا شده و پرونده\u200Cها و تاریخچه آن\u200Cها را در رایانه شما ذخیره می\u200Cکند. با این وجود دیگر نگران از دست دادن اطلاعات و سورس کد های خود نخواهید بود. با استفاده از گیت همچنین می\u200Cتوانید از گیت هاب GitHub برای ذخیره یک کپی از پرونده\u200Cها و سابقه ویرایش آن\u200Cها استفاده کنید. بستری جذاب برای برنامه نویس ها برای به اشتراک گذاشتن سورس خود با دیگران و استفاده از سورس دیگران و تجریه های برنامه نویسی آن ها است.\n" +
                     "\n" +
-                    "Git می\u200Cتواند تغییرات را به طور خودکار ادغام کند، به عنوان مثال دو نفر می\u200Cتوانند در قسمت\u200Cهای مختلف یک فایل کار کنند و بعدا بدون تغییر کار یکدیگر، آن تغییرات را ادغام کنند! بنابراین صرف نظر از اینکه شما کدی را به تنهایی\u200C می\u200Cنویسید یا در قالب یک تیم کار می\u200Cکنید، آموزش جامع Git برای شما مفید خواهد بود."
+                    "Git می\u200Cتواند تغییرات را به طور خودکار ادغام کند، به عنوان مثال دو نفر می\u200Cتوانند در قسمت\u200Cهای مختلف یک فایل کار کنند و بعدا بدون تغییر کار یکدیگر، آن تغییرات را ادغام کنند! بنابراین صرف نظر از اینکه شما کدی را به تنهایی\u200C می\u200Cنویسید یا در قالب یک تیم کار می\u200Cکنید، آموزش جامع Git برای شما مفید خواهد بود.",
+            "https://dl.daneshjooyar.com/mvie/Moodi_Hamed/Wordpress-Plugin-Development/Wordpress-Plugin-Development-Demo-720.mp4"
         ),
 
         )
     val newite = arrayOf(
         DataProduct(
-            11, "آموزش ساخت خزنده وب با پایتون (خزش در صفحات دیجی کالا)",
+            11,
+            "آموزش ساخت خزنده وب با پایتون (خزش در صفحات دیجی کالا)",
             "علی رستمی",
             R.drawable.khaz,
             299000,
-            40, 4, 26, 11,
+            40,
+            4,
+            26,
+            11,
             arrayListOf(
                 "ساخت خزنده وب با پایتون",
                 "خزش در صفحات دیجی کالا",
@@ -135,11 +147,19 @@ fun HomeScreen(navController: NavHostController) {
                     "\n" +
                     "اگر توسعه دهنده اپلیکیشن\u200Cهای موبایلی هستید، وب کراولینگ روشی است که می\u200Cتوان در بسیاری از اپلیکیشن\u200Cها از آن استفاده کرد و در این روش شما به سرعت می\u200Cتوانید داده\u200Cهایی را از یک سرور دریافت و در حالت مورد نیاز استفاده کنید. برای نمونه، دریافت داده\u200Cهای هواشناسی از یک سرور می\u200Cتواند کاربرد مهم وب کراولینگ با پایتون باشد یا حتی می\u200Cتوان با این روش متادیتا هایی را در مورد فیلم\u200Cها از یک منبع اینترنتی دریافت کرد. \n" +
                     "\n" +
-                    "در مقابل، برای توسعه اپلیکیشن\u200Cهای دسکتاپ و حتی وب نیز از وب کراول استفاده می\u200Cشود که پایتون در این مورد بهترین گزینه\u200C است. کتابخانه\u200Cهای متنوع و قدرتمندی در این زبان وجود دارند که در عمل کار شما را برای ساخت یک وب کراولر در پایتون آسان خواهند کرد."
+                    "در مقابل، برای توسعه اپلیکیشن\u200Cهای دسکتاپ و حتی وب نیز از وب کراول استفاده می\u200Cشود که پایتون در این مورد بهترین گزینه\u200C است. کتابخانه\u200Cهای متنوع و قدرتمندی در این زبان وجود دارند که در عمل کار شما را برای ساخت یک وب کراولر در پایتون آسان خواهند کرد.",
+            "https://dl.daneshjooyar.com/mvie/Rostami-Ali/other/demo-crawler.mp4"
         ),
         DataProduct(
-            12, "  دوره آموزش جاوا به همراه ۲۰ تمرین واقعی + آموزش شی گرایی",
-            "طاها اهوازی", R.drawable.java, 1900000, 40, 20, 31, 85,
+            12,
+            "  دوره آموزش جاوا به همراه ۲۰ تمرین واقعی + آموزش شی گرایی",
+            "طاها اهوازی",
+            R.drawable.java,
+            1900000,
+            40,
+            20,
+            31,
+            85,
             arrayListOf(
                 "آموزش شی گرایی در زبان برنامه نویسی جاوا",
                 "بررسی کامل مدیریت فایل ها در جاوا",
@@ -153,12 +173,20 @@ fun HomeScreen(navController: NavHostController) {
                     "\n" +
                     "آموزش جاوا دانشجویار مناسب چه افرادیست؟\n" +
                     "این دوره آموزش جاوا مناسب برای تمام افرادیست که میخواهند یک زبان برنامه نویسی قدیمی و البته به روز را شروع به یادگیری کنند و در صنایع مختلف مشغول به کار شوند برای مثال، افرادی که به دنبال کار در صنعت فناوری اطلاعات هستند با توجه به گستردگی استفاده از جاوا در صنعت، آشنایی با آن می\u200Cتواند برای افرادی که قصد ورود به این صنعت را دارند، بسیار مفید باشد.\n" +
-                    "به طور کلی، جاوا یکی از زبان\u200Cهای برنامه\u200Cنویسی پرکاربرد و گسترده است که برای افراد با تمام سطوح تجربه واهداف مختلف می\u200Cتواند مناسب باشد."
+                    "به طور کلی، جاوا یکی از زبان\u200Cهای برنامه\u200Cنویسی پرکاربرد و گسترده است که برای افراد با تمام سطوح تجربه واهداف مختلف می\u200Cتواند مناسب باشد.",
+            "https://dl.daneshjooyar.com/mvie/Ahvazi_Taha_d056890e/java/demo-java.mp4"
+
         ),
         DataProduct(
-            13, "آموزش پیاده سازی ۲۰ پروژه جاوا اسکریپتی مناسب بازار کار",
-            "محمد حسین معین", R.drawable.javascr,
-            299000, 40, 3, 34, 20,
+            13,
+            "آموزش پیاده سازی ۲۰ پروژه جاوا اسکریپتی مناسب بازار کار",
+            "محمد حسین معین",
+            R.drawable.javascr,
+            299000,
+            40,
+            3,
+            34,
+            20,
             arrayListOf(
                 "صفحه بندی سایت",
                 "ساخت بازی عدد رندوم",
@@ -170,7 +198,8 @@ fun HomeScreen(navController: NavHostController) {
                     "مزیت های دوره:\n" +
                     "آموزش کاربردی: این دوره برای شرکت\u200Cکنندگان به عنوان یک دوره کاربردی در زمینه جاوا اسکریپت طراحی شده است. شما با ۲۰ پروژه متنوع مواجه خواهید شد که در آن\u200Cها مهارت\u200Cهای اساسی و پیشرفته جاوا اسکریپت را به کار خواهید برد. این مزیت به شما امکان می\u200Cدهد تجربه عملی و عملیاتی در جاوا اسکریپت به دست آورید.\n" +
                     "\n" +
-                    "آموزش شغلی: با تکمیل این دوره و اجرای پروژه\u200Cهای مختلف، شما قادر خواهید بود تا به عنوان یک توسعه\u200Cدهنده جاوا اسکریپت وارد بازار کار شوید. این دوره به شما ابزارها، مفاهیم و تکنیک\u200Cهای لازم را در اختیار می\u200Cگذارد تا به عنوان یک حرفه\u200Cای در زمینه جاوا اسکریپت موفق عمل کنید."
+                    "آموزش شغلی: با تکمیل این دوره و اجرای پروژه\u200Cهای مختلف، شما قادر خواهید بود تا به عنوان یک توسعه\u200Cدهنده جاوا اسکریپت وارد بازار کار شوید. این دوره به شما ابزارها، مفاهیم و تکنیک\u200Cهای لازم را در اختیار می\u200Cگذارد تا به عنوان یک حرفه\u200Cای در زمینه جاوا اسکریپت موفق عمل کنید.",
+            "https://dl.daneshjooyar.com/mvie/Moein-Mohammad/other/%D9%88%DB%8C%D8%AF%DB%8C%D9%88-%D8%A7%D8%B5%D9%84%DB%8C.mp4"
         )
     )
     val topTicher = arrayOf(
@@ -197,7 +226,8 @@ fun HomeScreen(navController: NavHostController) {
                 "محصول گذاری متغییر",
                 "نصب و پیکربندی افزونه ووکامرس فارسی",
             ),
-            "در این آموزش قصد داریم تا یک فروشگاه اینترنتی را از صفر بوسیله افزونه ووکامرس پیاده سازی کنیم. پس از گذراندن دوره آموزش ووکامرس، شما قادر به پیاده سازی یک فروشگاه اینترنتی کاملا حرفه ای در سیستم مدیریت محتوای وردپرس خواهید بود. فروشگاهی که امکان ایجاد محصول، قیمت گذاری و رفتن به درگاه پرداخت را برای شما فراهم میکند. در این دوره آموزش طراحی سایت فروشگاهی با وردپرس از افزونه رسمی ووکامرس استفاده شده ولی شما قادر به پیاده سازی هر فروشگاهی با هر قالبی در وردپرس خواهید بود."
+            "در این آموزش قصد داریم تا یک فروشگاه اینترنتی را از صفر بوسیله افزونه ووکامرس پیاده سازی کنیم. پس از گذراندن دوره آموزش ووکامرس، شما قادر به پیاده سازی یک فروشگاه اینترنتی کاملا حرفه ای در سیستم مدیریت محتوای وردپرس خواهید بود. فروشگاهی که امکان ایجاد محصول، قیمت گذاری و رفتن به درگاه پرداخت را برای شما فراهم میکند. در این دوره آموزش طراحی سایت فروشگاهی با وردپرس از افزونه رسمی ووکامرس استفاده شده ولی شما قادر به پیاده سازی هر فروشگاهی با هر قالبی در وردپرس خواهید بود.",
+            "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/woo-free/S01-Part01-intro.mp4"
         ),
         DataProduct(
             32,
@@ -219,20 +249,44 @@ fun HomeScreen(navController: NavHostController) {
             ),
             "وردپرس یک سیستم مدیریت محتوای کاملا رایگان و متن باز است. شما با آموزش وردپرس رایگان، هر نوع وبسایتی را میتوانید پیاده سازی کنید. هر نوع؟ بله هر نوع وبسایتی! مثال بزنم؟ خوب همین وبسایت دانشجویار با وردپرس پیاده سازی شده. درسته که در دانشجویار کدنویسی اختصاصی انجام میشه (افزونه نویسی و قالب نویسی) اما در اصل موضوع که سایت بر روی سیستم وردپرس هست، تفاوتی ایجاد نمیکنه.\n" +
                     "\n" +
-                    "پس با وردپرس میتونید سایت خبری، فروشگاهی، آموزشی، رزومه شخصی، شرکتی و حتی وبسایت هایی مشابه دیجی کالا، دیوار و باسلام رو ایجاد و پیاده سازی کنید. اما قبل از اینکه به فکر پیاده سازی بیوفتید، کمی صبر کنید. پیش از شروع هر کاری باید مهارت لازم رو کسب کرد. پس به دوره آموزش WordPress رایگان، خوش اومدین؛ جایی که قراره از نصب تا راه اندازی قالب خبری در وردپرس، بهتون آموزش داده بشه."
+                    "پس با وردپرس میتونید سایت خبری، فروشگاهی، آموزشی، رزومه شخصی، شرکتی و حتی وبسایت هایی مشابه دیجی کالا، دیوار و باسلام رو ایجاد و پیاده سازی کنید. اما قبل از اینکه به فکر پیاده سازی بیوفتید، کمی صبر کنید. پیش از شروع هر کاری باید مهارت لازم رو کسب کرد. پس به دوره آموزش WordPress رایگان، خوش اومدین؛ جایی که قراره از نصب تا راه اندازی قالب خبری در وردپرس، بهتون آموزش داده بشه.",
+            "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/wordpress-free/S01-intro/S01-Part01-Intro.mp4"
         ),
         DataProduct(
-            33, "آموزش گرامر زبان انگلیسی ( یادگیری از صفر )", "تینا ظهوری", R.drawable.gramer,
-            0, 0, 0, 0, 0,
+            33,
+            "آموزش گرامر زبان انگلیسی ( یادگیری از صفر )",
+            "تینا ظهوری",
+            R.drawable.gramer,
+            0,
+            0,
+            0,
+            0,
+            0,
             arrayListOf(
                 "گرامر حال ساده (Present Simple Tense)",
                 "گرامر گذشته ساده (Past Simple Tense)",
                 "گرامر آینده ساده با استفاده از will (Future Simple Tense)",
                 "گرامر آینده ساده با استفاده از be going to (Future Simple Tense)",
                 "گرامر حال استمراری (Present continuous Tense)",
-            ), ""
+            ),
+            "دوره آموزش گرامر زبان انگلیسی یکی از مهم\u200Cترین واسطه\u200Cها در یادگیری زبان انگلیسی برای دانشجویان است. این دوره در راستای آموزش زبان انگلیسی، به دانشجویان امکان می\u200Cدهد تا قواعد و ساختارهای زبان انگلیسی را به طور جامع فرا بگیرند و توانایی خواندن، نوشتن، گفتار و شنیداری خود را بهبود بخشند.",
+            "https://dl.daneshjooyar.com/mvie/Zohouri-Tina/english-1/Introduction.mp4"
         )
 
+    )
+    val cat = arrayOf(
+        Category(1, R.drawable.sitecat, "طراحی سایت", 142),
+        Category(2, R.drawable.andcat, "برنامه نویسی موبایل", 44),
+        Category(3, R.drawable.danwshga, "دروس دانشگاهی", 24),
+        Category(4, R.drawable.hosh, "هوش مصنوعی", 31),
+        Category(5, R.drawable.windo, "برنامه نویسی ویندوز", 88),
+        Category(6, R.drawable.pagadade, "پایگاه داده", 12),
+        Category(7, R.drawable.shabakan, "شبکه", 17),
+        Category(8, R.drawable.bazisazi, "بازی سازی", 22),
+        Category(9, R.drawable.tarahi, "طراحی و گرافیک", 70),
+        Category(10, R.drawable.electrinic, "آموزش الکترونیک", 42),
+        Category(11, R.drawable.casbokar, "کسب و کار", 53),
+        Category(12, R.drawable.oder, "نرم افزارهای کاربردی", 32),
     )
     Scaffold(
         containerColor = Color.White,
@@ -260,6 +314,7 @@ fun HomeScreen(navController: NavHostController) {
             item {
                 MySlider()
             }
+
             item {
                 TopProduct(text = "جدید ترین ها")
                 LazyRow(
@@ -288,7 +343,6 @@ fun HomeScreen(navController: NavHostController) {
                         .wrapContentHeight()
                 ) {
                     item { AmazingStart() }
-                    item { }
                     itemsIndexed(loveitem) { index, item ->
                         AmazingItem(navController = navController, data = item)
                     }
@@ -296,6 +350,9 @@ fun HomeScreen(navController: NavHostController) {
                         AmazingEnd(navController, Screen.PackGold.route, Screen.Home.route)
                     }
                 }
+            }
+            item {
+                CategoryHome(cat)
             }
             item {
                 Spacer(modifier = Modifier.height(20.dp))
@@ -312,6 +369,8 @@ fun HomeScreen(navController: NavHostController) {
                     }
                 }
             }
+
+
             item {
                 LazyRow(
                     verticalAlignment = Alignment.CenterVertically,
@@ -532,7 +591,8 @@ fun AmazingItem(navController: NavHostController, data: DataProduct) {
         data.student,
         data.jalase,
         data.info,
-        data.more
+        data.more,
+        data.videoUrl
     )
     val gson = Gson()
     val itemstring = gson.toJson(zori)
@@ -823,7 +883,8 @@ fun ItemProduct(data: DataProduct, navController: NavHostController) {
         data.student,
         data.jalase,
         data.info,
-        data.more
+        data.more,
+        data.videoUrl
     )
     val gson = Gson()
     val itemstring = gson.toJson(zori)
@@ -969,7 +1030,8 @@ fun FreeItem(data: DataProduct, navController: NavHostController) {
         data.student,
         data.jalase,
         data.info,
-        data.more
+        data.more,
+        data.videoUrl
     )
     val gson = Gson()
     val itemstring = gson.toJson(zori)
@@ -1094,4 +1156,102 @@ fun TopTicher(data: TopTicher) {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun CategoryHome(data: Array<Category>) {
+    Spacer(modifier = Modifier.height(10.dp))
+    Text(
+        text = "موضوعات کاربردی و منتخب", fontFamily = myFont,
+        fontSize = 28.sp,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth(),
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    FlowRow(
+        maxItemsInEachRow = 3,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .padding(horizontal = 5.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalArrangement = Arrangement.Center
+    ) {
+        for (item in data) {
+            Catitem(data = item)
+        }
+        Spacer(modifier = Modifier.height(14.dp))
 
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Catitem(data: Category) {
+    Card(
+        onClick = {},
+        elevation = CardDefaults.cardElevation(5.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        modifier = Modifier
+            .fillMaxWidth(0.32f)
+            .padding(top = 13.dp)
+            .wrapContentHeight(),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            Color(0xFF8CBBEB),
+                            Color.White,
+                        )
+                    )
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Image(painter = painterResource(data.img), contentDescription = "")
+            Text(
+                text = data.title,
+                fontFamily = myFont,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
+            )
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "",
+                    tint = dancolor
+
+                )
+
+                Text(
+                    text = "دوره",
+                    fontFamily = myFont,
+                    fontSize = 12.sp,
+                    color = dancolor
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                Text(
+                    text = data.number.toString(),
+                    fontFamily = myFont,
+                    fontSize = 14.sp,
+                    color = dancolor
+                )
+
+            }
+
+        }
+    }
+}
+
+@Composable
+fun MyNavigationDrawer(){
+
+}

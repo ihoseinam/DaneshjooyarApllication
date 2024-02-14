@@ -19,34 +19,36 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 import androidx.navigation.NavHostController
 import com.google.gson.Gson
 import ir.hoseinahmadi.daneshjooyarapllication.R
@@ -71,6 +73,7 @@ fun InfoItem(navController: NavHostController, data: String) {
                 .background(Color.White)
                 .padding(it),
         ) {
+
             item {
                 infoPack(dataitem)
             }
@@ -104,7 +107,7 @@ fun InfoItem(navController: NavHostController, data: String) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color(0xFF505A94))
-                            .padding(end = 5.dp),
+                            .padding(5.dp),
                         textAlign = TextAlign.End,
                         fontFamily = myFont,
                         fontWeight = FontWeight.Bold,
@@ -112,7 +115,8 @@ fun InfoItem(navController: NavHostController, data: String) {
                         color = Color.White
                     )
                     Text(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(8.dp),
                         text = dataitem.more, textAlign = TextAlign.End,
                         fontFamily = myFont,
                         color = Color.White
@@ -163,6 +167,7 @@ fun MyTop(navController: NavHostController) {
 @Composable
 fun MyBottomBar(data: DataProduct) {
     BottomAppBar(
+        containerColor = Color.White,
         contentPadding = PaddingValues(8.dp),
         modifier = Modifier
             .fillMaxWidth()
@@ -175,7 +180,9 @@ fun MyBottomBar(data: DataProduct) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             val priceortakh = darsadfun(data.priceOr, data.darsad)
-            Row {
+            Row (
+                verticalAlignment = Alignment.CenterVertically
+            ){
                 Image(
                     painter = painterResource(id = R.drawable.toman), contentDescription = "",
                     modifier = Modifier.size(22.dp)
@@ -192,7 +199,7 @@ fun MyBottomBar(data: DataProduct) {
             Button(
                 onClick = { /*TODO*/ },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = dancolor,
+                    containerColor = Color(0xff08c056),
                     contentColor = Color.White,
                 ),
                 modifier = Modifier.padding(end = 4.dp),
@@ -201,6 +208,8 @@ fun MyBottomBar(data: DataProduct) {
                 Text(
                     text = "افزودن به سبد خرید",
                     fontFamily = myFont,
+                    fontSize = 17.sp,
+                    color = Color.White
                 )
             }
 
@@ -253,22 +262,12 @@ fun infoPack(data: DataProduct) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 5.dp)
+            .padding(top = 3.dp)
             .background(dancolor),
         verticalArrangement = Arrangement.Center
     ) {
-        Box(
-            contentAlignment = Alignment.TopCenter
-        ) {
-            Image(
-                painter = painterResource(id = data.img),
-                contentDescription = "",
-                modifier = Modifier
-                    .size(400.dp, 250.dp)
-                    .padding(start = 5.dp, end = 5.dp)
-                    .fillMaxSize(),
-            )
-        }
+            val e =data.videoUrl
+            VideoPlayerExo(videoUrl = e)
 
         Text(
             text = data.title,
@@ -277,9 +276,21 @@ fun infoPack(data: DataProduct) {
             textAlign = TextAlign.End,
             fontFamily = myFont,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(end = 5.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(end = 8.dp)
+                .fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(5.dp))
+        Text(text = data.nameTicher,
+            fontSize = 18.sp,
+            color = Color.White,
+            textAlign = TextAlign.End,
+            fontFamily = myFont,
+            modifier = Modifier
+                .padding(end = 8.dp)
+                .fillMaxWidth()
+            )
+        Spacer(modifier = Modifier.height(15.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()

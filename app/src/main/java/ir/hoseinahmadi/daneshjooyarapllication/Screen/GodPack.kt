@@ -15,9 +15,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -238,152 +240,102 @@ fun GoldPackItem(navController: NavHostController, data: DataProduct) {
         data.student,
         data.jalase,
         data.info,
+        data.videoUrl,
     )
     val gson = Gson()
     val itemString = gson.toJson(datazori)
-    Card(
-        onClick = {
-            navController.navigate(Screen.InfoItemScreen.route + "?data=${itemString}")
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(3.dp)
-    ) {
-        Row(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier
-                    .weight(0.5f)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.End,
-            ) {
-                Spacer(modifier = Modifier.height(20.dp))
-                Text(
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                    textAlign = TextAlign.End,
-                    text = data.title,
-                    fontFamily = myFont
-                )
-                Spacer(modifier = Modifier.height(14.dp))
-                Text(
-                    text = data.nameTicher, fontFamily = myFont
-                )
-                Text(
-                    text = data.priceOr.toString(), fontFamily = myFont
-                )
-            }
-            Image(
-                modifier = Modifier
-                    .width(200.dp)
-                    .height(140.dp)
-                    .clip(RoundedCornerShape(15.dp))
-                    .weight(0.5f)
-                    .padding(4.dp),
-                contentScale = ContentScale.Crop,
-                painter = painterResource(id = data.img),
-                contentDescription = ""
-            )
-
-        }
-    }
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ItemGold(navController: NavHostController, data: DataProduct) {
-    val zori = DataProduct(
-        data.id,
-        data.title,
-        data.nameTicher,
-        data.img,
-        data.priceOr,
-        data.darsad,
-        data.Houre,
-        data.student,
-        data.jalase,
-        data.info,
-        data.more
-    )
-    val gson = Gson()
-    val itemstring = gson.toJson(zori)
     Card(
         elevation = CardDefaults.cardElevation(15.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
         onClick = {
-            navController.navigate(Screen.InfoItemScreen.route + "?data=${itemstring}")
+            navController.navigate(Screen.InfoItemScreen.route + "?data=${itemString}")
         },
-        shape = RoundedCornerShape(10.dp),
         modifier = Modifier
-            .fillMaxWidth(0.5f)
-            .height(300.dp)
-            .padding(start = 3.dp, top = 5.dp, end = 3.dp, bottom = 5.dp)
+            .fillMaxWidth()
+            .padding(2.dp)
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.End
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(3.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = data.img), contentDescription = "",
-                Modifier
-                    .width(220.dp)
-                    .height(140.dp)
-                    .padding(8.dp),
-                contentScale = ContentScale.Crop
-            )
-
-            Text(
-                text = data.title,
-                fontFamily = myFont,
-                fontSize = 16.sp,
-                textAlign = TextAlign.End,
-                modifier = Modifier.padding(end = 5.dp, start = 1.dp)
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-
-            Text(
-                text = data.nameTicher,
-                fontFamily = myFont,
-                fontSize = 14.sp,
-                color = dancolor,
-                textAlign = TextAlign.End,
-                modifier = Modifier.padding(end = 5.dp)
-            )
-            Spacer(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .background(Color(0x0F5A5959))
-            )
-            Row(
-                modifier = Modifier.padding(start = 6.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .weight(0.6f)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.End,
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.toman),
-                    contentDescription = "",
-                    Modifier.size(23.dp)
+                Spacer(modifier = Modifier.height(9.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    textAlign = TextAlign.End,
+                    text = data.title,
+                    fontFamily = myFont
                 )
                 Text(
-                    text = darsadfun(data.priceOr, data.darsad),
-                    fontFamily = myFont,
-                    fontSize = 16.sp,
-                    textAlign = TextAlign.Start,
-                    color = Color.Black,
+                    modifier = Modifier.fillMaxWidth(),
+                    text = data.nameTicher, fontFamily = myFont,
+                    textAlign = TextAlign.End,
+                    color = dancolor
+                )
+                Spacer(
                     modifier = Modifier
-                        .padding(start = 5.dp)
                         .fillMaxWidth()
+                        .height(1.8.dp)
+                        .background(Color(0x0F6B6969))
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    Image(
+                        painter = painterResource(id = R.drawable.toman), contentDescription = "",
+                        Modifier
+                            .size(25.dp)
+                            .padding(start = 5.dp,)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = darsadfun(data.priceOr,data.darsad), fontFamily = myFont,
+                        textAlign = TextAlign.Start,
+                        fontSize = 16.sp,
+                        color = Color.Red
+                    )
+                }
+
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+            Column(
+                modifier = Modifier
+                    .weight(0.4f)
+            ) {
+                Image(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(18.dp))
+                        .padding(4.dp),
+                    contentScale = ContentScale.Fit,
+                    painter = painterResource(id = data.img),
+                    contentDescription = ""
                 )
             }
 
+
         }
     }
+
 }
+
 @Composable
 fun TopTicherTab(data: TopTicher) {
     Card(
@@ -394,7 +346,7 @@ fun TopTicherTab(data: TopTicher) {
         modifier = Modifier
             .fillMaxWidth(0.5f)
             .height(410.dp)
-            .clickable {  }
+            .clickable { }
             .padding(2.dp)
     ) {
         Column(
@@ -442,20 +394,16 @@ fun pack(navController: NavHostController, data: Array<DataProduct>) {
         pack
     }
     if (ll) {
-        LazyVerticalGrid(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(top = 5.dp)
                 .background(Color(0xffd6a927)),
-            columns = GridCells.Adaptive(180.dp),
-            contentPadding = PaddingValues(3.dp),
-            content = {
-                itemsIndexed(data) { index, item ->
-                    ItemGold(
-                        navController = navController, data = item
-                    )
-                }
+        ) {
+            itemsIndexed(data) { index, item ->
+                GoldPackItem(navController = navController, data = item)
             }
-        )
+        }
 
     }
 }
@@ -464,16 +412,19 @@ fun pack(navController: NavHostController, data: Array<DataProduct>) {
 var ticher = mutableStateOf(false)
 
 @Composable
-fun ticher( topTicher: Array<TopTicher>) {
+fun ticher(topTicher: Array<TopTicher>) {
     var bb by remember {
         ticher
     }
     if (bb) {
-       LazyVerticalGrid(columns = GridCells.Adaptive(180.dp), contentPadding = PaddingValues(4.dp), content ={
-           itemsIndexed(topTicher){index: Int, item: TopTicher ->
-               TopTicherTab(data = item)
-           }
-       } )
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(180.dp),
+            contentPadding = PaddingValues(4.dp),
+            content = {
+                itemsIndexed(topTicher) { index: Int, item: TopTicher ->
+                    TopTicherTab(data = item)
+                }
+            })
     }
 
 }

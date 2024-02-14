@@ -12,4 +12,5 @@ data class DataProduct(
     val jalase :Int,
     val info :ArrayList<String>,
     val more:String="",
+    val videoUrl:String="",
 )
