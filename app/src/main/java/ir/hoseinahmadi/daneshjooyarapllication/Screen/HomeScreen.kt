@@ -1,6 +1,11 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -44,7 +49,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -288,6 +298,11 @@ fun HomeScreen(navController: NavHostController) {
         Category(11, R.drawable.casbokar, "کسب و کار", 53),
         Category(12, R.drawable.oder, "نرم افزارهای کاربردی", 32),
     )
+    val y = rememberLazyListState()
+    val scrol by remember {
+        mutableStateOf(y)
+    }
+
     Scaffold(
         containerColor = Color.White,
         floatingActionButton = {
@@ -302,19 +317,23 @@ fun HomeScreen(navController: NavHostController) {
                 )
             }
         },
-        topBar = { MyTopBarHome() }
+        topBar = {
+            AnimatedVisibility(visible = scrol.firstVisibleItemIndex==0) {
+                MyTopBarHome()
+            }
+
+        }
     ) {
         LazyColumn(
+            state = y,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
                 .padding(it),
-            state = rememberLazyListState()
         ) {
             item {
                 MySlider()
             }
-
             item {
                 TopProduct(text = "جدید ترین ها")
                 LazyRow(
@@ -330,7 +349,9 @@ fun HomeScreen(navController: NavHostController) {
                 }
 
             }
-
+            item {
+                CategoryHome(cat)
+            }
             item {
                 LazyRow(
                     verticalAlignment = Alignment.CenterVertically,
@@ -350,9 +371,6 @@ fun HomeScreen(navController: NavHostController) {
                         AmazingEnd(navController, Screen.PackGold.route, Screen.Home.route)
                     }
                 }
-            }
-            item {
-                CategoryHome(cat)
             }
             item {
                 Spacer(modifier = Modifier.height(20.dp))
@@ -728,7 +746,7 @@ fun MySlider(modifier: Modifier = Modifier) {
             .height(250.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(modifier = modifier.wrapContentSize()) {
+        Box(modifier = modifier.fillMaxSize()) {
             com.google.accompanist.pager.HorizontalPager(
                 state = pagerState,
                 modifier
@@ -798,6 +816,20 @@ fun MySlider(modifier: Modifier = Modifier) {
 
             }
 
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 15.dp),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                PageIndicator(
+                    pageCount = images.size,
+                    currentPage = pagerState.currentPage,
+                    modifier = Modifier
+                )
+
+            }
+
         }
 
     }
@@ -825,7 +857,7 @@ fun IndicatorDots(isSelected: Boolean, modifier: Modifier) {
             .padding(2.dp)
             .size(size.value)
             .clip(CircleShape)
-            .background(if (isSelected) Color(0xff373737) else Color(0xA8373737))
+            .background(if (isSelected) Color(0xFFFFFFFF) else Color(0xFF2196F3))
     )
 }
 
@@ -903,8 +935,8 @@ fun ItemProduct(data: DataProduct, navController: NavHostController) {
         shape = RoundedCornerShape(5.dp),
         modifier = Modifier
             .width(300.dp)
-            .height(310.dp)
-            .padding(10.dp)
+            .height(315.dp)
+            .padding(8.dp)
     ) {
         Column(
             modifier = Modifier
@@ -1173,7 +1205,7 @@ fun CategoryHome(data: Array<Category>) {
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .padding(horizontal = 5.dp),
+            .padding(horizontal = 3.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalArrangement = Arrangement.Center
     ) {
@@ -1195,9 +1227,9 @@ fun Catitem(data: Category) {
             containerColor = Color.White
         ),
         modifier = Modifier
-            .fillMaxWidth(0.32f)
-            .padding(top = 13.dp)
-            .wrapContentHeight(),
+            .fillMaxWidth(0.322f)
+            .padding(top = 16.dp)
+            .height(220.dp),
     ) {
         Column(
             modifier = Modifier
@@ -1218,8 +1250,11 @@ fun Catitem(data: Category) {
                 text = data.title,
                 fontFamily = myFont,
                 color = Color.Black,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                fontSize = 13.sp,
+                textAlign = TextAlign.Center
             )
+            Spacer(modifier = Modifier.height(8.dp))
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
@@ -1230,18 +1265,17 @@ fun Catitem(data: Category) {
                     tint = dancolor
 
                 )
-
                 Text(
                     text = "دوره",
                     fontFamily = myFont,
-                    fontSize = 12.sp,
+                    fontSize = 11.sp,
                     color = dancolor
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = data.number.toString(),
                     fontFamily = myFont,
-                    fontSize = 14.sp,
+                    fontSize = 12.sp,
                     color = dancolor
                 )
 
@@ -1252,6 +1286,6 @@ fun Catitem(data: Category) {
 }
 
 @Composable
-fun MyNavigationDrawer(){
+fun MyNavigationDrawer() {
 
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +21,7 @@ import androidx.media3.ui.PlayerView
 
 @Composable
 fun VideoPlayerExo(
-    videoUrl: String
+    videoUrl: String,
 ) {
     val context = LocalContext.current
     val player = ExoPlayer.Builder(context).build().apply {
@@ -30,22 +31,27 @@ fun VideoPlayerExo(
     val playWhenReady by rememberSaveable {
         mutableStateOf(false)
     }
-
     playerView.player = player
 
     LaunchedEffect(player) {
         player.prepare()
         player.playWhenReady = playWhenReady
+        }
+    DisposableEffect(true){
+        onDispose {
+            player.stop()
+            player.release()
+        }
     }
 
-    AndroidView(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(250.dp)
-            .padding(6.dp)
-            .clip(RoundedCornerShape(15.dp)),
-        factory = {
-            playerView
-        })
+        AndroidView(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp)
+                .padding(6.dp)
+                .clip(RoundedCornerShape(15.dp)),
+            factory = {
+                playerView
+            })
 
-}
+    }

@@ -1,5 +1,7 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
+import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
@@ -34,7 +37,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,19 +60,35 @@ import ir.hoseinahmadi.daneshjooyarapllication.R
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.DataProduct
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 @Composable
 fun InfoItem(navController: NavHostController, data: String) {
     val gson = Gson()
     val dataitem = gson.fromJson(data, DataProduct::class.java)
+    val pp = rememberLazyListState()
+    var isScrol by remember {
+        mutableStateOf(pp)
+    }
     Scaffold(
-        topBar = { MyTop(navController) },
+        topBar = {
+            AnimatedVisibility (isScrol.firstVisibleItemIndex!=0){
+                MyTop(navController)
+            }
+                 },
         bottomBar = {
             MyBottomBar(data = dataitem)
         },
         floatingActionButton = {}
     ) {
         LazyColumn(
+            state = pp,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
@@ -115,7 +136,8 @@ fun InfoItem(navController: NavHostController, data: String) {
                         color = Color.White
                     )
                     Text(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(8.dp),
                         text = dataitem.more, textAlign = TextAlign.End,
                         fontFamily = myFont,
@@ -257,6 +279,7 @@ fun chiYad(text: String) {
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun infoPack(data: DataProduct) {
     Column(
@@ -268,7 +291,6 @@ fun infoPack(data: DataProduct) {
     ) {
             val e =data.videoUrl
             VideoPlayerExo(videoUrl = e)
-
         Text(
             text = data.title,
             fontSize = 20.sp,

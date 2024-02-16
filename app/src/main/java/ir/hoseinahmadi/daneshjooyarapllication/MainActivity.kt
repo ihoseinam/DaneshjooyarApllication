@@ -8,12 +8,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ir.hoseinahmadi.daneshjooyarapllication.Navigation.BottomNavigationBar
 import ir.hoseinahmadi.daneshjooyarapllication.Navigation.SetUpNavGraph
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
@@ -44,4 +51,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+
 }
+
