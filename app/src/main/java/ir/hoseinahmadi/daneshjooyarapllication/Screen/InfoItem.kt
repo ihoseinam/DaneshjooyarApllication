@@ -1,7 +1,11 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +39,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -73,15 +78,11 @@ fun InfoItem(navController: NavHostController, data: String) {
     val gson = Gson()
     val dataitem = gson.fromJson(data, DataProduct::class.java)
     val pp = rememberLazyListState()
-    var isScrol by remember {
-        mutableStateOf(pp)
-    }
+
     Scaffold(
         topBar = {
-            AnimatedVisibility (isScrol.firstVisibleItemIndex!=0){
-                MyTop(navController)
-            }
-                 },
+            MyTop(navController)
+        },
         bottomBar = {
             MyBottomBar(data = dataitem)
         },
@@ -94,7 +95,6 @@ fun InfoItem(navController: NavHostController, data: String) {
                 .background(Color.White)
                 .padding(it),
         ) {
-
             item {
                 infoPack(dataitem)
             }
@@ -202,9 +202,9 @@ fun MyBottomBar(data: DataProduct) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             val priceortakh = darsadfun(data.priceOr, data.darsad)
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.toman), contentDescription = "",
                     modifier = Modifier.size(22.dp)
@@ -289,8 +289,8 @@ fun infoPack(data: DataProduct) {
             .background(dancolor),
         verticalArrangement = Arrangement.Center
     ) {
-            val e =data.videoUrl
-            VideoPlayerExo(videoUrl = e)
+        val e = data.videoUrl
+        VideoPlayerExo(videoUrl = e)
         Text(
             text = data.title,
             fontSize = 20.sp,
@@ -303,7 +303,8 @@ fun infoPack(data: DataProduct) {
                 .fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(5.dp))
-        Text(text = data.nameTicher,
+        Text(
+            text = data.nameTicher,
             fontSize = 18.sp,
             color = Color.White,
             textAlign = TextAlign.End,
@@ -311,7 +312,7 @@ fun infoPack(data: DataProduct) {
             modifier = Modifier
                 .padding(end = 8.dp)
                 .fillMaxWidth()
-            )
+        )
         Spacer(modifier = Modifier.height(15.dp))
         Row(
             modifier = Modifier

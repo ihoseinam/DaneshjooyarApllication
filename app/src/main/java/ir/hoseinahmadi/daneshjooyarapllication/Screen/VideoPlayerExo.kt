@@ -33,11 +33,11 @@ fun VideoPlayerExo(
     }
     playerView.player = player
 
-    LaunchedEffect(player) {
+    LaunchedEffect( player) {
         player.prepare()
         player.playWhenReady = playWhenReady
         }
-    DisposableEffect(true){
+    DisposableEffect(player){
         onDispose {
             player.stop()
             player.release()

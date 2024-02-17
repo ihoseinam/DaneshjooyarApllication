@@ -10,7 +10,7 @@ data class DataProduct(
     val Houre :Int,
     val student :Int,
     val jalase :Int,
-    val info :ArrayList<String>,
+    val info :List<String>,
     val more:String="",
     val videoUrl:String="",
 )

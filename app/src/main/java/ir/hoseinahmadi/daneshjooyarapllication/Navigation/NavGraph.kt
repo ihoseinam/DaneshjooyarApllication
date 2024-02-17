@@ -6,10 +6,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import ir.hoseinahmadi.daneshjooyarapllication.Screen.CategoryScreen
 import ir.hoseinahmadi.daneshjooyarapllication.Screen.HomeScreen
 import ir.hoseinahmadi.daneshjooyarapllication.Screen.InfoItem
-import ir.hoseinahmadi.daneshjooyarapllication.Screen.MyPack
+import ir.hoseinahmadi.daneshjooyarapllication.Screen.MyProfileScreen
 import ir.hoseinahmadi.daneshjooyarapllication.Screen.PackGold
 import ir.hoseinahmadi.daneshjooyarapllication.Screen.ShopingCard
 import ir.hoseinahmadi.daneshjooyarapllication.Screen.SplashScreen
@@ -23,37 +22,33 @@ fun SetUpNavGraph(navController: NavHostController) {
         composable(route = Screen.Splash.route) {
             SplashScreen(navController = navController)
         }
-        composable(route = Screen.Home.route){
+        composable(route = Screen.Home.route) {
             HomeScreen(navController = navController)
         }
-        composable(route = Screen.Category.route){
-            CategoryScreen(navController = navController)
-        }
-        composable(route =Screen.PackGold.route)
-          {
+        composable(route = Screen.PackGold.route)
+        {
             PackGold(navController = navController)
-        }
-
-        composable(route = Screen.MyPack.route){
-            MyPack(navController = navController)
         }
 
         composable(route = Screen.InfoItemScreen.route
                 + "?data={data}",
             arguments = listOf(
-                navArgument("data"){
+                navArgument("data") {
                     type = NavType.StringType
                 }
             )
-            ){
+        ) {
 
             InfoItem(
                 navController = navController,
                 data = it.arguments?.getString("data").toString()
-                )
+            )
         }
-        composable(route = Screen.ShopingCard.route){
+        composable(route = Screen.ShopingCard.route) {
             ShopingCard(navController = navController)
+        }
+        composable(Screen.MyProfile.route) {
+            MyProfileScreen(navController = navController)
         }
     }
 

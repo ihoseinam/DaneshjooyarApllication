@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -58,15 +60,17 @@ import ir.hoseinahmadi.daneshjooyarapllication.dataClas.TopTicher
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
 
-val eeeee = mutableStateOf(1)
-
+val selectedTabGold = mutableStateOf(1)
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun PackGold(navController: NavHostController) {
-
     var select by remember {
-        eeeee
+        selectedTabGold
     }
+    val title = listOf(
+        "اساتید طلایی",
+        "دوره های طلایی"
+    )
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -74,151 +78,39 @@ fun PackGold(navController: NavHostController) {
             selectedTabIndex = select,
             contentColor = Color.Black,
             containerColor = Color.White,
-        )
-        {
-            Tab(
-                selected = true,
-                text = {
-                    Text(
-                        text = "اساتید طلایی",
-                        fontFamily = myFont
-                    )
-                },
-                onClick = {
-                    pack.value = false
-                    ticher.value = true
-                    eeeee.value = 0
-                },
-                icon = {
-                    if (ticher.value) {
-                        Icon(Icons.Filled.Face, contentDescription = "")
-                    } else {
-                        Icon(Icons.Outlined.Face, contentDescription = "")
-                    }
-                },
-                selectedContentColor = Color.Black,
-                unselectedContentColor = Color.Blue,
-            )
-            Tab(
-                selected = true,
-                text = {
-                    Text(
-                        text = "دوره های طلایی",
-                        fontFamily = myFont
-                    )
-                },
-                onClick = {
-                    pack.value = true
-                    ticher.value = false
-                    eeeee.value = 1
-                },
-                icon = {
-                    if (pack.value) {
-                        Icon(Icons.Filled.Email, contentDescription = "")
-                    } else {
-                        Icon(Icons.Outlined.Email, contentDescription = "")
+            indicator = { line ->
+                Box(
+                    modifier = Modifier
+                        .tabIndicatorOffset(line[select])
+                        .height(3.dp)
+                        .background(dancolor)
+                )
+            },
+            modifier = Modifier.padding(horizontal = 5.dp),
+        ) {
+            title.forEachIndexed { index, title ->
+                Tab(
+                    selected = select == index,
+                    onClick = { select = index },
+                    selectedContentColor = dancolor,
+                    unselectedContentColor = Color.DarkGray,
+                    text = {
+                        Row {
+                            Text(
+                                text = title,
+                                fontFamily = myFont
+                            )
+                        }
+                    },
+                )
 
-                    }
-                },
-                selectedContentColor = Color.Black,
-                unselectedContentColor = Color.Blue,
-            )
-
+            }
         }
-        val loveitem = arrayOf(
-            DataProduct(
-                1,
-                stringResource(id = R.string.androidTitle),
-                "علیرضا احمدی",
-                R.drawable.androidgold,
-                6900000,
-                60,
-                150,
-                815,
-                350,
-                arrayListOf(
-                    stringResource(id = R.string.an1),
-                    stringResource(id = R.string.an2),
-                    stringResource(id = R.string.an3),
-                    stringResource(id = R.string.an4),
-                    stringResource(id = R.string.an5),
-                    stringResource(id = R.string.an6),
-                    stringResource(id = R.string.an7),
-                ),
-                "دوره آموزش اندروید از مقدمات شروع میشه. لازم نیست چیزی یاد داشته باشی رفیق. همینکه بتونی سیستم رو خاموش روشن کنی یا یه سرچ ساده تو گوگل انجام بدی کافیه. میدونی که سیستم عامل اندروید الان 80 درصد بازار گوشی های موبایل رو به خودش اختصاص داده و در تمام ابزارهایی مثل تلویزیون، ساعت هوشمند، عینک و حتی یخچال ها هم مورد استفاده قرار میگیره. البته با فلاتر و جت پک کامپوز میتونی خروجی ویندوز و IOS هم بگیری که این فریمورک ها هم در همین دوره، آموزش داده میشه. پس بازار کار خیلی بزرگی رو پیش روی خودت تصور کن.\n" +
-                        "\n" +
-                        "سخن مدرس: اگر تضمین کنی که طبق برنامه من پیش بیای و دوره رو ببینی، منم تضمین میکنم که تبدیل به یک برنامه نویس اندروید بشی.\n" +
-                        "\n" +
-                        "اینکه توانایی استفاده از گوشی های اندرویدی رو داری عالیه، اما سبب کسب درآمد تو از این حوزه نمیشه. تو الان فقط یک مصرف کننده از سیستم عامل اندروید هستی. من قصد دارم تو رو از یک مصرف کننده ساده، تبدیل به یک توسعه دهنده\u200E\u200Cی توانمند در حوزه برنامه نویسی اندروید کنم. پس با استفاده از آموزش برنامه نویسی اندروید میتونی هر اپلیکیشنی که مدنظرت هست رو پیاده سازی کنی. اگر قصد مهاجرت داری؛ اگر به فکر استخدام در شرکت های بزرگ ایران نظیر دیجی کالا، سروش، اسنپ، دیوار و غیره هستی یا اگر ایده شخصی داری و میخوای نرم\u200Cافزاری اختصاصی پیاده سازی کنی، به آموزش اندروید خوش اومدی."
-            ),
-            DataProduct(
-                2,
-                stringResource(id = R.string.afzoneTitle),
-                "حامد مودی",
-                R.drawable.word,
-                1299000,
-                40,
-                17, 422, 72,
-                arrayListOf(
-                    stringResource(id = R.string.git1),
-                    stringResource(id = R.string.git2),
-                    stringResource(id = R.string.git3),
-                    stringResource(id = R.string.git4),
-                    stringResource(id = R.string.git5),
-                ),
-                "Git متداول\u200Cترین سیستم سورس کنترل است. Git نرم افزاری است که به صورت محلی اجرا شده و پرونده\u200Cها و تاریخچه آن\u200Cها را در رایانه شما ذخیره می\u200Cکند. با این وجود دیگر نگران از دست دادن اطلاعات و سورس کد های خود نخواهید بود. با استفاده از گیت همچنین می\u200Cتوانید از گیت هاب GitHub برای ذخیره یک کپی از پرونده\u200Cها و سابقه ویرایش آن\u200Cها استفاده کنید. بستری جذاب برای برنامه نویس ها برای به اشتراک گذاشتن سورس خود با دیگران و استفاده از سورس دیگران و تجریه های برنامه نویسی آن ها است.\n" +
-                        "\n" +
-                        "Git می\u200Cتواند تغییرات را به طور خودکار ادغام کند، به عنوان مثال دو نفر می\u200Cتوانند در قسمت\u200Cهای مختلف یک فایل کار کنند و بعدا بدون تغییر کار یکدیگر، آن تغییرات را ادغام کنند! بنابراین صرف نظر از اینکه شما کدی را به تنهایی\u200C می\u200Cنویسید یا در قالب یک تیم کار می\u200Cکنید، آموزش جامع Git برای شما مفید خواهد بود."
-            ),
-            DataProduct(
-                2,
-                stringResource(id = R.string.afzoneTitle),
-                "حامد مودی",
-                R.drawable.word,
-                1299000,
-                40,
-                17, 422, 72,
-                arrayListOf(
-                    stringResource(id = R.string.git1),
-                    stringResource(id = R.string.git2),
-                    stringResource(id = R.string.git3),
-                    stringResource(id = R.string.git4),
-                    stringResource(id = R.string.git5),
-                ),
-                "Git متداول\u200Cترین سیستم سورس کنترل است. Git نرم افزاری است که به صورت محلی اجرا شده و پرونده\u200Cها و تاریخچه آن\u200Cها را در رایانه شما ذخیره می\u200Cکند. با این وجود دیگر نگران از دست دادن اطلاعات و سورس کد های خود نخواهید بود. با استفاده از گیت همچنین می\u200Cتوانید از گیت هاب GitHub برای ذخیره یک کپی از پرونده\u200Cها و سابقه ویرایش آن\u200Cها استفاده کنید. بستری جذاب برای برنامه نویس ها برای به اشتراک گذاشتن سورس خود با دیگران و استفاده از سورس دیگران و تجریه های برنامه نویسی آن ها است.\n" +
-                        "\n" +
-                        "Git می\u200Cتواند تغییرات را به طور خودکار ادغام کند، به عنوان مثال دو نفر می\u200Cتوانند در قسمت\u200Cهای مختلف یک فایل کار کنند و بعدا بدون تغییر کار یکدیگر، آن تغییرات را ادغام کنند! بنابراین صرف نظر از اینکه شما کدی را به تنهایی\u200C می\u200Cنویسید یا در قالب یک تیم کار می\u200Cکنید، آموزش جامع Git برای شما مفید خواهد بود."
-            ),
-            DataProduct(
-                2,
-                stringResource(id = R.string.afzoneTitle),
-                "حامد مودی",
-                R.drawable.word,
-                1299000,
-                40,
-                17, 422, 72,
-                arrayListOf(
-                    stringResource(id = R.string.git1),
-                    stringResource(id = R.string.git2),
-                    stringResource(id = R.string.git3),
-                    stringResource(id = R.string.git4),
-                    stringResource(id = R.string.git5),
-                ),
-                "Git متداول\u200Cترین سیستم سورس کنترل است. Git نرم افزاری است که به صورت محلی اجرا شده و پرونده\u200Cها و تاریخچه آن\u200Cها را در رایانه شما ذخیره می\u200Cکند. با این وجود دیگر نگران از دست دادن اطلاعات و سورس کد های خود نخواهید بود. با استفاده از گیت همچنین می\u200Cتوانید از گیت هاب GitHub برای ذخیره یک کپی از پرونده\u200Cها و سابقه ویرایش آن\u200Cها استفاده کنید. بستری جذاب برای برنامه نویس ها برای به اشتراک گذاشتن سورس خود با دیگران و استفاده از سورس دیگران و تجریه های برنامه نویسی آن ها است.\n" +
-                        "\n" +
-                        "Git می\u200Cتواند تغییرات را به طور خودکار ادغام کند، به عنوان مثال دو نفر می\u200Cتوانند در قسمت\u200Cهای مختلف یک فایل کار کنند و بعدا بدون تغییر کار یکدیگر، آن تغییرات را ادغام کنند! بنابراین صرف نظر از اینکه شما کدی را به تنهایی\u200C می\u200Cنویسید یا در قالب یک تیم کار می\u200Cکنید، آموزش جامع Git برای شما مفید خواهد بود."
-            ),
+        when (select) {
+            1 -> pack(navController)
+            0 -> ticher()
+        }
 
-            )
-        val topTicher = arrayOf(
-            TopTicher(1, "استاد علیرضا احمدی", R.drawable.ali, "متخصص برنامه نویسی موبایل و مدرس"),
-            TopTicher(2, "استاد حامد مودی", R.drawable.modi, "طراح و کدنویس افزونه و قالب وردپرس "),
-            TopTicher(1, "استاد طاها اهوازی", R.drawable.taha, "برنامه نویس فول استک موبایل"),
-        )
-
-        pack(navController, loveitem)
-
-        ticher(topTicher)
 
     }
 
@@ -302,12 +194,12 @@ fun GoldPackItem(navController: NavHostController, data: DataProduct) {
                         painter = painterResource(id = R.drawable.toman), contentDescription = "",
                         Modifier
                             .size(25.dp)
-                            .padding(start = 5.dp,)
+                            .padding(start = 5.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = darsadfun(data.priceOr,data.darsad), fontFamily = myFont,
+                        text = darsadfun(data.priceOr, data.darsad), fontFamily = myFont,
                         textAlign = TextAlign.Start,
                         fontSize = 16.sp,
                         color = Color.Red
@@ -386,48 +278,92 @@ fun TopTicherTab(data: TopTicher) {
     }
 }
 
-var pack = mutableStateOf(true)
 
 @Composable
-fun pack(navController: NavHostController, data: Array<DataProduct>) {
-    var ll by remember {
-        pack
-    }
-    if (ll) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 5.dp)
-                .background(Color(0xffd6a927)),
-        ) {
-            itemsIndexed(data) { index, item ->
-                GoldPackItem(navController = navController, data = item)
-            }
+fun pack(navController: NavHostController) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 5.dp)
+            .background(Color(0xffd6a927)),
+    ) {
+        val loveitem = arrayOf(
+            DataProduct(
+                1,
+                "جامع ترین دوره آموزش برنامه نویسی اندروید (کاتلین، فلاتر و جاوا)",
+                "علیرضا احمدی",
+                R.drawable.androidgold,
+                6900000,
+                60,
+                150,
+                815,
+                350,
+                arrayListOf(
+
+                    "آموزش کامل نصب و راه اندازی نرم افزار اندروید استودیو",
+                    "آموزش برنامه نویسی با کمک جت جی پی تی و گوگل بارد",
+                    "آموزش فلاتر و جاوا جهت تکمیل رزومه",
+                    "ایجاد اپلیکیشن نمایش قیمت ارز و طلا به صورت آنلاین",
+                    "آموزش اعتبارسنجی و احراز هویت کاربران با ایمیل",
+                    "آموزش تخصصی ارتباط با سرور و آنلاین کردن اپلیکیشن ها",
+                    "دریافت مدرک طلایی قابل استعلام پس از اتمام دوره",
+                ),
+                "دوره آموزش اندروید از مقدمات شروع میشه. لازم نیست چیزی یاد داشته باشی رفیق. همینکه بتونی سیستم رو خاموش روشن کنی یا یه سرچ ساده تو گوگل انجام بدی کافیه. میدونی که سیستم عامل اندروید الان 80 درصد بازار گوشی های موبایل رو به خودش اختصاص داده و در تمام ابزارهایی مثل تلویزیون، ساعت هوشمند، عینک و حتی یخچال ها هم مورد استفاده قرار میگیره. البته با فلاتر و جت پک کامپوز میتونی خروجی ویندوز و IOS هم بگیری که این فریمورک ها هم در همین دوره، آموزش داده میشه. پس بازار کار خیلی بزرگی رو پیش روی خودت تصور کن.\n" +
+                        "\n" +
+                        "سخن مدرس: اگر تضمین کنی که طبق برنامه من پیش بیای و دوره رو ببینی، منم تضمین میکنم که تبدیل به یک برنامه نویس اندروید بشی.\n" +
+                        "\n" +
+                        "اینکه توانایی استفاده از گوشی های اندرویدی رو داری عالیه، اما سبب کسب درآمد تو از این حوزه نمیشه. تو الان فقط یک مصرف کننده از سیستم عامل اندروید هستی. من قصد دارم تو رو از یک مصرف کننده ساده، تبدیل به یک توسعه دهنده\u200E\u200Cی توانمند در حوزه برنامه نویسی اندروید کنم. پس با استفاده از آموزش برنامه نویسی اندروید میتونی هر اپلیکیشنی که مدنظرت هست رو پیاده سازی کنی. اگر قصد مهاجرت داری؛ اگر به فکر استخدام در شرکت های بزرگ ایران نظیر دیجی کالا، سروش، اسنپ، دیوار و غیره هستی یا اگر ایده شخصی داری و میخوای نرم\u200Cافزاری اختصاصی پیاده سازی کنی، به آموزش اندروید خوش اومدی.",
+                "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/Demo-Android.mp4"
+            ),
+            DataProduct(
+                2,
+                "دوره آموزش افزونه نویسی وردپرس، پلاگین نویسی حرفه ای برای وردپرس",
+                "حامد مودی",
+                R.drawable.word,
+                1299000,
+                40,
+                17,
+                422,
+                72,
+                arrayListOf(
+                    "آشنایی کامل با مفهوم و فلسفه سورس کنترل ها",
+                    "مفاهیم اولیه در گیت، نظیر نصب و ساخت ریپازیتوری و ...",
+                    "ایجاد شاخه در گیت",
+                    "جابجایی بین کامیت های مختلف",
+                    "خطایابی و دیباگینگ بوسیله گیت",
+                ),
+                "Git متداول\u200Cترین سیستم سورس کنترل است. Git نرم افزاری است که به صورت محلی اجرا شده و پرونده\u200Cها و تاریخچه آن\u200Cها را در رایانه شما ذخیره می\u200Cکند. با این وجود دیگر نگران از دست دادن اطلاعات و سورس کد های خود نخواهید بود. با استفاده از گیت همچنین می\u200Cتوانید از گیت هاب GitHub برای ذخیره یک کپی از پرونده\u200Cها و سابقه ویرایش آن\u200Cها استفاده کنید. بستری جذاب برای برنامه نویس ها برای به اشتراک گذاشتن سورس خود با دیگران و استفاده از سورس دیگران و تجریه های برنامه نویسی آن ها است.\n" +
+                        "\n" +
+                        "Git می\u200Cتواند تغییرات را به طور خودکار ادغام کند، به عنوان مثال دو نفر می\u200Cتوانند در قسمت\u200Cهای مختلف یک فایل کار کنند و بعدا بدون تغییر کار یکدیگر، آن تغییرات را ادغام کنند! بنابراین صرف نظر از اینکه شما کدی را به تنهایی\u200C می\u200Cنویسید یا در قالب یک تیم کار می\u200Cکنید، آموزش جامع Git برای شما مفید خواهد بود.",
+                "https://dl.daneshjooyar.com/mvie/Moodi_Hamed/Wordpress-Plugin-Development/Wordpress-Plugin-Development-Demo-720.mp4"
+            ),
+
+            )
+        itemsIndexed(loveitem) { index, item ->
+            GoldPackItem(navController = navController, data = item)
         }
-
     }
+
 }
 
-
-var ticher = mutableStateOf(false)
 
 @Composable
-fun ticher(topTicher: Array<TopTicher>) {
-    var bb by remember {
-        ticher
-    }
-    if (bb) {
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(180.dp),
-            contentPadding = PaddingValues(4.dp),
-            content = {
-                itemsIndexed(topTicher) { index: Int, item: TopTicher ->
-                    TopTicherTab(data = item)
-                }
-            })
-    }
-
+fun ticher() {
+    val topTicher = arrayOf(
+        TopTicher(1, "استاد علیرضا احمدی", R.drawable.ali, "متخصص برنامه نویسی موبایل و مدرس"),
+        TopTicher(2, "استاد حامد مودی", R.drawable.modi, "طراح و کدنویس افزونه و قالب وردپرس "),
+        TopTicher(1, "استاد طاها اهوازی", R.drawable.taha, "برنامه نویس فول استک موبایل"),
+    )
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(180.dp),
+        contentPadding = PaddingValues(4.dp),
+        content = {
+            itemsIndexed(topTicher) { index: Int, item: TopTicher ->
+                TopTicherTab(data = item)
+            }
+        })
 }
+
 
 private fun darsadfun(price: Int, darsad: Int): String {
     return if (darsad > 0) {

@@ -65,7 +65,7 @@ fun BottomNavigationBar(
         ),
         BottomNavItem(
             name = "حساب من",
-            route = Screen.MyPack.route,
+            route = Screen.MyProfile.route,
             selectedIcon = Icons.Filled.Person,
             deselectedIcon = Icons.Outlined.Person,
         ),
