@@ -1,6 +1,11 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -44,6 +49,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,10 +76,28 @@ import ir.hoseinahmadi.daneshjooyarapllication.dataClas.TopTicher
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.reduce
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.toSet
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.util.UUID
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
+    val scrollState = rememberLazyListState()
+    val loli by remember {
+        derivedStateOf { scrollState.firstVisibleItemIndex == 0 }
+    }
     Scaffold(
         containerColor = Color.White,
         floatingActionButton = {
@@ -87,7 +113,12 @@ fun HomeScreen(navController: NavHostController) {
             }
         },
         topBar = {
+            AnimatedVisibility(
+                loli,
+                exit = fadeOut(), enter = slideInVertically() + fadeIn()
+            ) {
                 MyTopBarHome()
+            }
         }
     ) {
         LazyColumn(
@@ -95,10 +126,9 @@ fun HomeScreen(navController: NavHostController) {
                 .fillMaxSize()
                 .background(Color.White)
                 .padding(it),
+            state = scrollState
         ) {
-            item {
-                MySlider()
-            }
+            item { MySlider() }
             item {
                 TopProduct(text = "جدید ترین ها")
                 LazyRow(
@@ -218,14 +248,13 @@ fun HomeScreen(navController: NavHostController) {
                             815,
                             350,
                             arrayListOf(
-
-                               "آموزش کامل نصب و راه اندازی نرم افزار اندروید استودیو",
-                                "آموزش برنامه نویسی با کمک جت جی پی تی و گوگل بارد",
-                               "آموزش فلاتر و جاوا جهت تکمیل رزومه",
-                              "ایجاد اپلیکیشن نمایش قیمت ارز و طلا به صورت آنلاین",
-                               "آموزش اعتبارسنجی و احراز هویت کاربران با ایمیل",
-                                "آموزش تخصصی ارتباط با سرور و آنلاین کردن اپلیکیشن ها",
-                                "دریافت مدرک طلایی قابل استعلام پس از اتمام دوره",
+                                "آموزش راه اندازی اندروید استودیو",
+                                "آموزش برنامه نویسی با کمکهوش مصنوعی",
+                                "آموزش فلاتر و جاوا جهت تکمیل رزومه",
+                                "ایجاد اپلیکیشن نمایش قیمت ارز و طلا ",
+                                "اعتبارسنجی و احراز هویت کاربران با ایمیل",
+                                "آموزش تخصصی ارتباط با سرور ",
+                                "دریافت مدرک طلایی قابل استعلام ",
                             ),
                             "دوره آموزش اندروید از مقدمات شروع میشه. لازم نیست چیزی یاد داشته باشی رفیق. همینکه بتونی سیستم رو خاموش روشن کنی یا یه سرچ ساده تو گوگل انجام بدی کافیه. میدونی که سیستم عامل اندروید الان 80 درصد بازار گوشی های موبایل رو به خودش اختصاص داده و در تمام ابزارهایی مثل تلویزیون، ساعت هوشمند، عینک و حتی یخچال ها هم مورد استفاده قرار میگیره. البته با فلاتر و جت پک کامپوز میتونی خروجی ویندوز و IOS هم بگیری که این فریمورک ها هم در همین دوره، آموزش داده میشه. پس بازار کار خیلی بزرگی رو پیش روی خودت تصور کن.\n" +
                                     "\n" +
@@ -245,11 +274,11 @@ fun HomeScreen(navController: NavHostController) {
                             422,
                             72,
                             arrayListOf(
-                              "آشنایی کامل با مفهوم و فلسفه سورس کنترل ها",
-                               "مفاهیم اولیه در گیت، نظیر نصب و ساخت ریپازیتوری و ...",
+                                "آشنایی کامل با مفهوم و فلسفه سورس کنترل ها",
+                                "مفاهیم اولیه در گیت، نظیر نصب و ساخت ریپازیتوری و ...",
                                 "ایجاد شاخه در گیت",
                                 "جابجایی بین کامیت های مختلف",
-                               "خطایابی و دیباگینگ بوسیله گیت",
+                                "خطایابی و دیباگینگ بوسیله گیت",
                             ),
                             "Git متداول\u200Cترین سیستم سورس کنترل است. Git نرم افزاری است که به صورت محلی اجرا شده و پرونده\u200Cها و تاریخچه آن\u200Cها را در رایانه شما ذخیره می\u200Cکند. با این وجود دیگر نگران از دست دادن اطلاعات و سورس کد های خود نخواهید بود. با استفاده از گیت همچنین می\u200Cتوانید از گیت هاب GitHub برای ذخیره یک کپی از پرونده\u200Cها و سابقه ویرایش آن\u200Cها استفاده کنید. بستری جذاب برای برنامه نویس ها برای به اشتراک گذاشتن سورس خود با دیگران و استفاده از سورس دیگران و تجریه های برنامه نویسی آن ها است.\n" +
                                     "\n" +
@@ -290,14 +319,13 @@ fun HomeScreen(navController: NavHostController) {
                             815,
                             350,
                             arrayListOf(
-
-                                "آموزش کامل نصب و راه اندازی نرم افزار اندروید استودیو",
-                                "آموزش برنامه نویسی با کمک جت جی پی تی و گوگل بارد",
+                                "آموزش راه اندازی اندروید استودیو",
+                                "آموزش برنامه نویسی با کمکهوش مصنوعی",
                                 "آموزش فلاتر و جاوا جهت تکمیل رزومه",
-                                "ایجاد اپلیکیشن نمایش قیمت ارز و طلا به صورت آنلاین",
-                                "آموزش اعتبارسنجی و احراز هویت کاربران با ایمیل",
-                                "آموزش تخصصی ارتباط با سرور و آنلاین کردن اپلیکیشن ها",
-                                "دریافت مدرک طلایی قابل استعلام پس از اتمام دوره",
+                                "ایجاد اپلیکیشن نمایش قیمت ارز و طلا ",
+                                "اعتبارسنجی و احراز هویت کاربران با ایمیل",
+                                "آموزش تخصصی ارتباط با سرور ",
+                                "دریافت مدرک طلایی قابل استعلام ",
                             ),
                             "دوره آموزش اندروید از مقدمات شروع میشه. لازم نیست چیزی یاد داشته باشی رفیق. همینکه بتونی سیستم رو خاموش روشن کنی یا یه سرچ ساده تو گوگل انجام بدی کافیه. میدونی که سیستم عامل اندروید الان 80 درصد بازار گوشی های موبایل رو به خودش اختصاص داده و در تمام ابزارهایی مثل تلویزیون، ساعت هوشمند، عینک و حتی یخچال ها هم مورد استفاده قرار میگیره. البته با فلاتر و جت پک کامپوز میتونی خروجی ویندوز و IOS هم بگیری که این فریمورک ها هم در همین دوره، آموزش داده میشه. پس بازار کار خیلی بزرگی رو پیش روی خودت تصور کن.\n" +
                                     "\n" +
@@ -346,12 +374,26 @@ fun HomeScreen(navController: NavHostController) {
                         .padding(vertical = 15.dp)
                         .wrapContentHeight()
                 ) {
-
                     item { AmazingTicher() }
                     val topTicher = arrayOf(
-                        TopTicher(1, "استاد علیرضا احمدی", R.drawable.ali, "متخصص برنامه نویسی موبایل و مدرس"),
-                        TopTicher(2, "استاد حامد مودی", R.drawable.modi, "طراح و کدنویس افزونه و قالب وردپرس "),
-                        TopTicher(1, "استاد طاها اهوازی", R.drawable.taha, "برنامه نویس فول استک موبایل"),
+                        TopTicher(
+                            1,
+                            "استاد علیرضا احمدی",
+                            R.drawable.ali,
+                            "متخصص برنامه نویسی موبایل "
+                        ),
+                        TopTicher(
+                            2,
+                            "استاد حامد مودی",
+                            R.drawable.modi,
+                            "طراح و کدنویس افزونه و قالب وردپرس "
+                        ),
+                        TopTicher(
+                            1,
+                            "استاد طاها اهوازی",
+                            R.drawable.taha,
+                            "برنامه نویس فول استک موبایل"
+                        ),
                     )
                     itemsIndexed(topTicher) { _, item ->
                         TopTicher(data = item)
@@ -522,7 +564,7 @@ fun AmazingEnd(navController: NavHostController, route1: String, route2: String)
         ),
         modifier = Modifier
             .width(180.dp)
-            .height(300.dp)
+            .height(273.dp)
             .padding(start = 10.dp, top = 5.dp, end = 5.dp, bottom = 5.dp)
     ) {
         Column(
@@ -611,34 +653,34 @@ fun AmazingEndTich(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AmazingItem(navController: NavHostController, data: DataProduct) {
-    val zori = DataProduct(
-        data.id,
-        data.title,
-        data.nameTicher,
-        data.img,
-        data.priceOr,
-        data.darsad,
-        data.Houre,
-        data.student,
-        data.jalase,
-        data.info,
-        data.more,
-        data.videoUrl
-    )
-    val gson = Gson()
-    val itemstring = gson.toJson(zori)
     Card(
         elevation = CardDefaults.cardElevation(15.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
         onClick = {
+            val zori = DataProduct(
+                data.id,
+                data.title,
+                data.nameTicher,
+                data.img,
+                data.priceOr,
+                data.darsad,
+                data.Houre,
+                data.student,
+                data.jalase,
+                data.info,
+                data.more,
+                data.videoUrl
+            )
+            val gson = Gson()
+            val itemstring = gson.toJson(zori)
             navController.navigate(Screen.InfoItemScreen.route + "?data=${itemstring}")
         },
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
             .width(220.dp)
-            .height(300.dp)
+            .height(273.dp)
             .padding(start = 10.dp, top = 5.dp, end = 5.dp, bottom = 5.dp)
     ) {
         Column(
@@ -736,10 +778,6 @@ fun MySlider(modifier: Modifier = Modifier) {
     val images = listOf(
         R.drawable.s,
         R.drawable.s4,
-        R.drawable.p1,
-        R.drawable.p2,
-        R.drawable.p3,
-        R.drawable.p4,
     )
     val pagerState = com.google.accompanist.pager.rememberPagerState(
         pageCount =
@@ -752,7 +790,6 @@ fun MySlider(modifier: Modifier = Modifier) {
             pagerState.scrollToPage(nextPage)
         }
     }
-    val scope = rememberCoroutineScope()
     Column(
         modifier
             .fillMaxWidth()
@@ -778,57 +815,8 @@ fun MySlider(modifier: Modifier = Modifier) {
                         modifier = Modifier.size(400.dp, 250.dp)
                     )
                 }
-            }
-            IconButton(
-                onClick = {
-                    val nextPage = pagerState.currentPage + 1
-                    if (nextPage < images.size) {
-                        scope.launch {
-                            pagerState.scrollToPage(nextPage)
-                        }
-                    }
-                },
-                modifier
-                    .padding(30.dp)
-                    .size(48.dp)
-                    .align(Alignment.CenterEnd)
-                    .clip(CircleShape),
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color(0x52373737)
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = "",
-                    modifier.fillMaxSize(),
-                    tint = Color.LightGray
-                )
-            }
-            IconButton(
-                onClick = {
-                    val prevPage = pagerState.currentPage - 1
-                    if (prevPage >= 0) {
-                        scope.launch {
-                            pagerState.scrollToPage(prevPage)
-                        }
-                    }
-                },
-                modifier
-                    .padding(30.dp)
-                    .size(48.dp)
-                    .align(Alignment.CenterStart)
-                    .clip(CircleShape),
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color(0x52373737)
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.KeyboardArrowLeft, contentDescription = "",
-                    modifier.fillMaxSize(),
-                    tint = Color.LightGray
-                )
 
             }
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -917,26 +905,25 @@ fun TopProduct(text: String) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemProduct(data: DataProduct, navController: NavHostController) {
-    val zori = DataProduct(
-        data.id,
-        data.title,
-        data.nameTicher,
-        data.img,
-        data.priceOr,
-        data.darsad,
-        data.Houre,
-        data.student,
-        data.jalase,
-        data.info,
-        data.more,
-        data.videoUrl
-    )
-    val gson = Gson()
-    val itemstring = gson.toJson(zori)
     val priceortakh = darsadfun(data.priceOr, data.darsad)
-
     Card(
         onClick = {
+            val zori = DataProduct(
+                data.id,
+                data.title,
+                data.nameTicher,
+                data.img,
+                data.priceOr,
+                data.darsad,
+                data.Houre,
+                data.student,
+                data.jalase,
+                data.info,
+                data.more,
+                data.videoUrl
+            )
+            val gson = Gson()
+            val itemstring = gson.toJson(zori)
             navController.navigate(
                 route = Screen.InfoItemScreen.route + "?data=${itemstring}"
             )
@@ -1064,24 +1051,24 @@ fun ItemProduct(data: DataProduct, navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FreeItem(data: DataProduct, navController: NavHostController) {
-    val zori = DataProduct(
-        data.id,
-        data.title,
-        data.nameTicher,
-        data.img,
-        data.priceOr,
-        data.darsad,
-        data.Houre,
-        data.student,
-        data.jalase,
-        data.info,
-        data.more,
-        data.videoUrl
-    )
-    val gson = Gson()
-    val itemstring = gson.toJson(zori)
     Card(
         onClick = {
+            val zori = DataProduct(
+                data.id,
+                data.title,
+                data.nameTicher,
+                data.img,
+                data.priceOr,
+                data.darsad,
+                data.Houre,
+                data.student,
+                data.jalase,
+                data.info,
+                data.more,
+                data.videoUrl
+            )
+            val gson = Gson()
+            val itemstring = gson.toJson(zori)
             navController.navigate(Screen.InfoItemScreen.route + "?data=${itemstring}")
         },
         elevation = CardDefaults.cardElevation(15.dp),
@@ -1291,7 +1278,6 @@ fun Catitem(data: Category) {
                     Icons.Default.KeyboardArrowLeft,
                     contentDescription = "",
                     tint = dancolor
-
                 )
                 Text(
                     text = "دوره",
@@ -1314,6 +1300,11 @@ fun Catitem(data: Category) {
 }
 
 @Composable
-fun MyNavigationDrawer() {
-
+fun MyNavigationDrawer() {}
+fun pasi2():Flow<Int> = flowOf(12,15,45,5,554,46,5,4,12,45,5)
+fun pasi(): Flow<Int> = flow {
+    for (item in 1..10) {
+        delay(10)
+        emit(item)
+    }
 }

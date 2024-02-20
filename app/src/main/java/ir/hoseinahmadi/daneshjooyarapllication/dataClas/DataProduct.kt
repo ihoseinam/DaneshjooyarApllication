@@ -1,5 +1,8 @@
 package ir.hoseinahmadi.daneshjooyarapllication.dataClas
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class DataProduct(
     val id:Int,
     val title :String,

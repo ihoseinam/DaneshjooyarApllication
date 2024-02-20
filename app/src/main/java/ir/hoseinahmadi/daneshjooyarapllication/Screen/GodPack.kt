@@ -350,9 +350,24 @@ fun pack(navController: NavHostController) {
 @Composable
 fun ticher() {
     val topTicher = arrayOf(
-        TopTicher(1, "استاد علیرضا احمدی", R.drawable.ali, "متخصص برنامه نویسی موبایل و مدرس"),
-        TopTicher(2, "استاد حامد مودی", R.drawable.modi, "طراح و کدنویس افزونه و قالب وردپرس "),
-        TopTicher(1, "استاد طاها اهوازی", R.drawable.taha, "برنامه نویس فول استک موبایل"),
+        TopTicher(
+            1,
+            "استاد علیرضا احمدی",
+            R.drawable.ali,
+            "متخصص برنامه نویسی موبایل "
+        ),
+        TopTicher(
+            2,
+            "استاد حامد مودی",
+            R.drawable.modi,
+            "طراح و کدنویس افزونه و قالب وردپرس "
+        ),
+        TopTicher(
+            1,
+            "استاد طاها اهوازی",
+            R.drawable.taha,
+            "برنامه نویس فول استک موبایل"
+        ),
     )
     LazyVerticalGrid(
         columns = GridCells.Adaptive(180.dp),

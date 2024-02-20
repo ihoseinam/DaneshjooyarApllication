@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import ir.hoseinahmadi.daneshjooyarapllication.R
+import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
 
 @Composable
@@ -74,7 +75,7 @@ fun BottomNavigationBar(
     val showBottomBar = backStackEntry.value?.destination?.route in item.map { it.route }
     if (showBottomBar) {
         Column {
-            Spacer(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color(0x0F626161)))
+            Spacer(modifier = Modifier.fillMaxWidth().height(3.5.dp).background(Color(0x0F626161)))
             Row {
                 NavigationBar(
                     modifier = Modifier
@@ -90,11 +91,11 @@ fun BottomNavigationBar(
                             selected = selected,
                             onClick = { onItemClick(item) },
                             colors = NavigationBarItemDefaults.colors(
-                                unselectedIconColor = Color(0xFF8D8B8B),
-                                unselectedTextColor = Color(0xFF999898),
-                                selectedIconColor = Color(0xFF000000),
-                                selectedTextColor = Color(0xFF000000),
-                                indicatorColor = Color(0xFFBCDAF4)
+                                unselectedIconColor = Color(0xFF000000),
+                                unselectedTextColor = Color(0xFF000000),
+                                selectedIconColor = Color(0xFFFFFFFF),
+                                selectedTextColor = dancolor,
+                                indicatorColor = dancolor
                             ),
                             icon = {
                                 if (selected) {

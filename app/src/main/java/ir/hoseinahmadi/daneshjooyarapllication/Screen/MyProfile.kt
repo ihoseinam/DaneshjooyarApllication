@@ -54,7 +54,7 @@ fun MyProfileScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = "ثبت نام و این گه بازیا", fontFamily = myFont, fontWeight = FontWeight.Bold, color = Color.White)
+            Text(text = "ثبت نام و ورود", fontFamily = myFont, fontWeight = FontWeight.Bold, color = Color.White)
         }
         TabRow(
             contentColor = Color.Black,
