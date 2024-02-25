@@ -34,14 +34,15 @@ fun SetUpNavGraph(navController: NavHostController) {
                 + "?data={data}",
             arguments = listOf(
                 navArgument("data") {
-                    type = NavType.StringType
+                    type = NavType.IntType
+                    defaultValue =0
                 }
             )
         ) {
 
             InfoItem(
                 navController = navController,
-                data = it.arguments?.getString("data").toString()
+                data = it.arguments?.getInt("data",0)
             )
         }
         composable(route = Screen.ShopingCard.route) {

@@ -52,6 +52,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.google.gson.Gson
 import ir.hoseinahmadi.daneshjooyarapllication.Navigation.Screen
 import ir.hoseinahmadi.daneshjooyarapllication.R
@@ -118,31 +120,16 @@ fun PackGold(navController: NavHostController) {
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun GoldPackItem(navController: NavHostController, data: DataProduct) {
-    val datazori = DataProduct(
-        data.id,
-        data.title,
-        data.nameTicher,
-        data.img,
-        data.priceOr,
-        data.darsad,
-        data.Houre,
-        data.student,
-        data.jalase,
-        data.info,
-        data.videoUrl,
-    )
-    val gson = Gson()
-    val itemString = gson.toJson(datazori)
     Card(
         elevation = CardDefaults.cardElevation(15.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
         onClick = {
-            navController.navigate(Screen.InfoItemScreen.route + "?data=${itemString}")
+            navController.navigate(Screen.InfoItemScreen.route + "?data=${data.id}")
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -212,12 +199,12 @@ fun GoldPackItem(navController: NavHostController, data: DataProduct) {
                 modifier = Modifier
                     .weight(0.4f)
             ) {
-                Image(
+                GlideImage(
                     modifier = Modifier
                         .clip(RoundedCornerShape(18.dp))
                         .padding(4.dp),
                     contentScale = ContentScale.Fit,
-                    painter = painterResource(id = data.img),
+                    model =  data.img,
                     contentDescription = ""
                 )
             }
@@ -228,6 +215,7 @@ fun GoldPackItem(navController: NavHostController, data: DataProduct) {
 
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun TopTicherTab(data: TopTicher) {
     Card(
@@ -245,13 +233,14 @@ fun TopTicherTab(data: TopTicher) {
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.End,
         ) {
-            Image(
+            GlideImage(
                 modifier = Modifier
                     .width(240.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .height(300.dp)
                     .padding(start = 8.dp, end = 8.dp, top = 4.dp),
-                painter = painterResource(id = data.img), contentDescription = "",
+                model = data.img,
+                contentDescription = "",
                 contentScale = ContentScale.Crop
             )
             Text(
@@ -292,53 +281,19 @@ fun pack(navController: NavHostController) {
                 1,
                 "جامع ترین دوره آموزش برنامه نویسی اندروید (کاتلین، فلاتر و جاوا)",
                 "علیرضا احمدی",
-                R.drawable.androidgold,
+                "https://www.daneshjooyar.com/wp-content/uploads/2023/08/android-1-min-1-400x225.jpg",
                 6900000,
                 60,
-                150,
-                815,
-                350,
-                arrayListOf(
-
-                    "آموزش کامل نصب و راه اندازی نرم افزار اندروید استودیو",
-                    "آموزش برنامه نویسی با کمک جت جی پی تی و گوگل بارد",
-                    "آموزش فلاتر و جاوا جهت تکمیل رزومه",
-                    "ایجاد اپلیکیشن نمایش قیمت ارز و طلا به صورت آنلاین",
-                    "آموزش اعتبارسنجی و احراز هویت کاربران با ایمیل",
-                    "آموزش تخصصی ارتباط با سرور و آنلاین کردن اپلیکیشن ها",
-                    "دریافت مدرک طلایی قابل استعلام پس از اتمام دوره",
-                ),
-                "دوره آموزش اندروید از مقدمات شروع میشه. لازم نیست چیزی یاد داشته باشی رفیق. همینکه بتونی سیستم رو خاموش روشن کنی یا یه سرچ ساده تو گوگل انجام بدی کافیه. میدونی که سیستم عامل اندروید الان 80 درصد بازار گوشی های موبایل رو به خودش اختصاص داده و در تمام ابزارهایی مثل تلویزیون، ساعت هوشمند، عینک و حتی یخچال ها هم مورد استفاده قرار میگیره. البته با فلاتر و جت پک کامپوز میتونی خروجی ویندوز و IOS هم بگیری که این فریمورک ها هم در همین دوره، آموزش داده میشه. پس بازار کار خیلی بزرگی رو پیش روی خودت تصور کن.\n" +
-                        "\n" +
-                        "سخن مدرس: اگر تضمین کنی که طبق برنامه من پیش بیای و دوره رو ببینی، منم تضمین میکنم که تبدیل به یک برنامه نویس اندروید بشی.\n" +
-                        "\n" +
-                        "اینکه توانایی استفاده از گوشی های اندرویدی رو داری عالیه، اما سبب کسب درآمد تو از این حوزه نمیشه. تو الان فقط یک مصرف کننده از سیستم عامل اندروید هستی. من قصد دارم تو رو از یک مصرف کننده ساده، تبدیل به یک توسعه دهنده\u200E\u200Cی توانمند در حوزه برنامه نویسی اندروید کنم. پس با استفاده از آموزش برنامه نویسی اندروید میتونی هر اپلیکیشنی که مدنظرت هست رو پیاده سازی کنی. اگر قصد مهاجرت داری؛ اگر به فکر استخدام در شرکت های بزرگ ایران نظیر دیجی کالا، سروش، اسنپ، دیوار و غیره هستی یا اگر ایده شخصی داری و میخوای نرم\u200Cافزاری اختصاصی پیاده سازی کنی، به آموزش اندروید خوش اومدی.",
-                "https://dl.daneshjooyar.com/mvie/Ahmadi-Alireza/Android-Programming/present/Demo-Android.mp4"
             ),
             DataProduct(
                 2,
                 "دوره آموزش افزونه نویسی وردپرس، پلاگین نویسی حرفه ای برای وردپرس",
                 "حامد مودی",
-                R.drawable.word,
+                "https://www.daneshjooyar.com/wp-content/uploads/2023/05/wordpress-min-min-400x225.jpg",
                 1299000,
                 40,
-                17,
-                422,
-                72,
-                arrayListOf(
-                    "آشنایی کامل با مفهوم و فلسفه سورس کنترل ها",
-                    "مفاهیم اولیه در گیت، نظیر نصب و ساخت ریپازیتوری و ...",
-                    "ایجاد شاخه در گیت",
-                    "جابجایی بین کامیت های مختلف",
-                    "خطایابی و دیباگینگ بوسیله گیت",
-                ),
-                "Git متداول\u200Cترین سیستم سورس کنترل است. Git نرم افزاری است که به صورت محلی اجرا شده و پرونده\u200Cها و تاریخچه آن\u200Cها را در رایانه شما ذخیره می\u200Cکند. با این وجود دیگر نگران از دست دادن اطلاعات و سورس کد های خود نخواهید بود. با استفاده از گیت همچنین می\u200Cتوانید از گیت هاب GitHub برای ذخیره یک کپی از پرونده\u200Cها و سابقه ویرایش آن\u200Cها استفاده کنید. بستری جذاب برای برنامه نویس ها برای به اشتراک گذاشتن سورس خود با دیگران و استفاده از سورس دیگران و تجریه های برنامه نویسی آن ها است.\n" +
-                        "\n" +
-                        "Git می\u200Cتواند تغییرات را به طور خودکار ادغام کند، به عنوان مثال دو نفر می\u200Cتوانند در قسمت\u200Cهای مختلف یک فایل کار کنند و بعدا بدون تغییر کار یکدیگر، آن تغییرات را ادغام کنند! بنابراین صرف نظر از اینکه شما کدی را به تنهایی\u200C می\u200Cنویسید یا در قالب یک تیم کار می\u200Cکنید، آموزش جامع Git برای شما مفید خواهد بود.",
-                "https://dl.daneshjooyar.com/mvie/Moodi_Hamed/Wordpress-Plugin-Development/Wordpress-Plugin-Development-Demo-720.mp4"
             ),
-
-            )
+        )
         itemsIndexed(loveitem) { index, item ->
             GoldPackItem(navController = navController, data = item)
         }
@@ -353,19 +308,19 @@ fun ticher() {
         TopTicher(
             1,
             "استاد علیرضا احمدی",
-            R.drawable.ali,
+            "https://raw.githubusercontent.com/ihoseinam/video-shop/main/ali.jpg",
             "متخصص برنامه نویسی موبایل "
         ),
         TopTicher(
             2,
             "استاد حامد مودی",
-            R.drawable.modi,
+            "https://raw.githubusercontent.com/ihoseinam/video-shop/main/modi.jpg",
             "طراح و کدنویس افزونه و قالب وردپرس "
         ),
         TopTicher(
             1,
             "استاد طاها اهوازی",
-            R.drawable.taha,
+            "https://raw.githubusercontent.com/ihoseinam/video-shop/main/taha.jpg",
             "برنامه نویس فول استک موبایل"
         ),
     )

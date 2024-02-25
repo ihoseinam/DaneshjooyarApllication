@@ -33,25 +33,25 @@ fun VideoPlayerExo(
     }
     playerView.player = player
 
-    LaunchedEffect( player) {
+    LaunchedEffect(player) {
         player.prepare()
         player.playWhenReady = playWhenReady
-        }
-    DisposableEffect(player){
+    }
+    DisposableEffect(player) {
         onDispose {
-            player.stop()
             player.release()
+            player.stop()
         }
     }
 
-        AndroidView(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .padding(6.dp)
-                .clip(RoundedCornerShape(15.dp)),
-            factory = {
-                playerView
-            })
+    AndroidView(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)
+            .padding(6.dp)
+            .clip(RoundedCornerShape(15.dp)),
+        factory = {
+            playerView
+        })
 
-    }
+}

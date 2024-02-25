@@ -6,6 +6,6 @@ import androidx.compose.runtime.Immutable
 data class TopTicher(
     val id :Int,
     val name:String,
-    val img:Int,
+    val img:String,
     val info :String
 )
