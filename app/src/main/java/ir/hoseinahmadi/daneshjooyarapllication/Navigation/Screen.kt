@@ -10,6 +10,7 @@ sealed class Screen(
     object InfoItemScreen:Screen("Info_Screen")
     object ShopingCard:Screen("shoping_card")
     object MyProfile:Screen("my_profile")
+    object LoginScreen:Screen("Login_Screen")
 
 
 }

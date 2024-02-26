@@ -1,6 +1,8 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
 import android.annotation.SuppressLint
+import android.content.Context.MODE_PRIVATE
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +22,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,32 +58,49 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import ir.hoseinahmadi.daneshjooyarapllication.Navigation.Screen
 import ir.hoseinahmadi.daneshjooyarapllication.R
 import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopTable
 import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopViewModel
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.reduce
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 val openDialog = mutableStateOf(false)
 
 @OptIn(DelicateCoroutinesApi::class, ExperimentalMaterial3Api::class)
-@SuppressLint(
-    "CoroutineCreationDuringComposition", "RememberReturnType",
-    "UnrememberedMutableState"
-)
 @Composable
 fun ShopingCard(navController: NavHostController) {
     val viewModel = viewModel(ShopViewModel::class.java)
     var llll by remember {
         mutableStateOf(emptyList<ShopTable>())
     }
-
+    var allPrice by remember {
+        mutableIntStateOf(0)
+    }
     LaunchedEffect(true) {
-        viewModel.allProduct.collectLatest {
-            llll = it
+        launch(Dispatchers.IO) {
+            viewModel.allProduct.collectLatest {
+                withContext(Dispatchers.Main) {
+                    llll = it
+                }
+            }
         }
+        launch(Dispatchers.IO) {
+            viewModel.allPrice.collect {
+                val totalAge = it.sum()
+                withContext(Dispatchers.Main) {
+                    allPrice = totalAge
+                }
+            }
+        }
+
     }
     val cartCount = viewModel.getProductCount.collectAsState(0)
     DialogShop(viewModel)
@@ -104,7 +127,54 @@ fun ShopingCard(navController: NavHostController) {
 
             )
         },
-        bottomBar = {},
+        bottomBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0x0FB0AFAF))
+                    .padding(horizontal = 5.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = ":مجموع سبد خرید",
+                        fontFamily = myFont,
+                        fontSize = 16.sp
+                    )
+                    Row {
+                        Image(
+                            painter = painterResource(id = R.drawable.toman),
+                            contentDescription = "",
+                            Modifier.size(24.dp),
+                        )
+
+                        val zori = String.format("%,d", allPrice)
+                        Text(
+                            text = zori,
+                            fontFamily = myFont,
+                            fontSize = 15.sp
+                        )
+                    }
+                }
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red,
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(10.dp),
+                    onClick = { /*TODO*/ }) {
+                    Text(
+                        text = "ادامه فرآیند خرید",
+                        fontFamily = myFont,
+                        fontSize = 14.sp
+                    )
+                }
+            }
+
+        },
     ) {
         LazyColumn(
             modifier = Modifier
@@ -122,22 +192,21 @@ fun ShopingCard(navController: NavHostController) {
                         Image(
                             painter = painterResource(id = R.drawable.empty_cart),
                             contentDescription = "",
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier.fillMaxSize().height(200.dp)
                         )
                         Text(
                             text = "سبد خرید خالی می باشد",
                             fontFamily = myFont,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 25.sp,
+                            fontSize = 28.sp,
                             color = Color.Red
                         )
                     }
-
                 }
             } else {
 
                 items(llll) {
-                    ShopItem(data = it, viewModel)
+                    ShopItem(data = it, viewModel, navController)
                 }
 
 
@@ -147,11 +216,13 @@ fun ShopingCard(navController: NavHostController) {
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
-fun ShopItem(data: ShopTable, viewModel: ShopViewModel) {
+fun ShopItem(data: ShopTable, viewModel: ShopViewModel, navController: NavHostController) {
     Card(
+        onClick = {
+            navController.navigate(Screen.InfoItemScreen.route + "?data=${data.id}")
+        },
         elevation = CardDefaults.cardElevation(15.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White

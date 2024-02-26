@@ -8,6 +8,8 @@ class ShopRepository(private val shopDao: ShopDao) {
 
     val allProduct: Flow<List<ShopTable>> = shopDao.getAllProduct()
     val allCount = shopDao.getProductCount()
+
+    val allPrice :Flow<List<Int>> =shopDao.allPrice
     suspend fun addNewProduct(product: ShopTable) {
         shopDao.addNewProduct(product)
     }

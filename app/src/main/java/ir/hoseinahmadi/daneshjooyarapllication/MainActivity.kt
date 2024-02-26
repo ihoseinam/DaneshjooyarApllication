@@ -31,7 +31,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel by viewModels<ShopViewModel>()
             navController = rememberNavController()
             Scaffold(
                 topBar = {},

@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import ir.hoseinahmadi.daneshjooyarapllication.LoginScreen
 import ir.hoseinahmadi.daneshjooyarapllication.Screen.HomeScreen
 import ir.hoseinahmadi.daneshjooyarapllication.Screen.InfoItem
 import ir.hoseinahmadi.daneshjooyarapllication.Screen.MyProfileScreen
@@ -50,6 +51,9 @@ fun SetUpNavGraph(navController: NavHostController) {
         }
         composable(Screen.MyProfile.route) {
             MyProfileScreen(navController = navController)
+        }
+        composable(Screen.LoginScreen.route){
+            LoginScreen(navController = navController)
         }
     }
 

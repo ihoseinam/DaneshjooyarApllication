@@ -38,6 +38,8 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
 
     val getProductCount: Flow<Int> = repositore.allCount
 
+    val allPrice: Flow<List<Int>> = repositore.allPrice
+
 
     fun chekedProduct(id: Int): Flow<Boolean> {
         return repositore.checkProduct(id)

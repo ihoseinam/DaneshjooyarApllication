@@ -1,5 +1,7 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +21,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Badge
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +36,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -43,6 +50,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,6 +60,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import ir.hoseinahmadi.daneshjooyarapllication.Navigation.Screen
 import ir.hoseinahmadi.daneshjooyarapllication.R
 import ir.hoseinahmadi.daneshjooyarapllication.Room.Fave.FaveViewModel
 import ir.hoseinahmadi.daneshjooyarapllication.Room.Fave.FavoriteTable
@@ -59,10 +68,13 @@ import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopTable
 import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopViewModel
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.withContext
 
 val selectedTabProfile = mutableIntStateOf(3)
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyProfileScreen(navController: NavHostController) {
@@ -78,87 +90,128 @@ fun MyProfileScreen(navController: NavHostController) {
         "پروفایل",
     )
     Column(
+        horizontalAlignment = Alignment.End,
         modifier = Modifier.fillMaxSize()
     ) {
         Column(
+            horizontalAlignment = Alignment.End,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp)
-                .background(dancolor)
-                .height(130.dp),
+                .padding(3.dp),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = "ثبت نام و ورود",
-                fontFamily = myFont,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-        TabRow(
-            contentColor = Color.Black,
-            indicator = { line ->
-                Box(
-                    modifier = Modifier
-                        .tabIndicatorOffset(line[selectedTabIndex])
-                        .height(3.dp)
-                        .background(Color.Red)
-                )
-            },
-            modifier = Modifier.padding(horizontal = 3.dp),
-            selectedTabIndex = selectedTabIndex
-        ) {
-            tabTitle.forEachIndexed { index, title ->
-                Tab(
-                    selected = selectedTabIndex == index,
-                    onClick = { selectedTabIndex = index },
-                    selectedContentColor = Color.Red,
-                    unselectedContentColor = Color.DarkGray,
-                    text = {
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            if (index == 2 && num.value > 0) {
-                                Badge(
-                                    contentColor = Color.White,
-                                    containerColor = Color.Red
-                                ){
-                                    Text(
-                                        num.value.toString(),
-                                        color = Color.White,
-                                    )
-                                }
-                                Spacer(modifier =Modifier. width(1.5.dp))
-                                Text(
-                                    text = title,
-                                    fontFamily = myFont,
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
+            val ee = LocalContext.current
+            val pref = ee.getSharedPreferences("username", Context.MODE_PRIVATE)
 
-                            } else {
-                                Text(
-                                    text = title,
-                                    fontFamily = myFont,
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
+            val eeee = mutableStateOf(pref.getString("name", "کاربر ناشناس").toString())
+            var nameState by remember {
+                eeee
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                IconButton(onClick = {
+                    navController.navigate(Screen.LoginScreen.route)
+                }) {
+                    Icon(
+                        Icons.Rounded.Edit, contentDescription = "", tint = dancolor,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = nameState,
+                        fontFamily = myFont,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        fontSize = 18.sp
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.avatar), contentDescription = "",
+                        Modifier
+                            .size(95.dp)
+                            .padding(5.dp)
+                            .clip(CircleShape)
+                    )
+                }
 
-
-                        }
-                    },
-                )
 
             }
 
+            TabRow(
+                contentColor = Color.Black,
+                containerColor = Color(0xFFFFFFFF),
+                indicator = { line ->
+                    Box(
+                        modifier = Modifier
+                            .tabIndicatorOffset(line[selectedTabIndex])
+                            .height(3.dp)
+                            .background(Color.Red)
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 1.5.dp),
+                selectedTabIndex = selectedTabIndex
+            ) {
+                tabTitle.forEachIndexed { index, title ->
+                    Tab(
+                        selected = selectedTabIndex == index,
+                        onClick = { selectedTabIndex = index },
+                        selectedContentColor = Color.Red,
+                        unselectedContentColor = Color.DarkGray,
+                        text = {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                if (index == 2 && num.value > 0) {
+                                    Badge(
+                                        contentColor = Color.White,
+                                        containerColor = Color.Red
+                                    ) {
+                                        Text(
+                                            num.value.toString(),
+                                            color = Color.White,
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(1.5.dp))
+                                    Text(
+                                        text = title,
+                                        fontFamily = myFont,
+                                        fontSize = 11.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+
+                                } else {
+                                    Text(
+                                        text = title,
+                                        fontFamily = myFont,
+                                        fontSize = 11.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+
+
+                            }
+                        },
+                    )
+
+                }
+            }
         }
         when (selectedTabIndex) {
             0 -> Licence()
             1 -> Pack()
-            2 -> Love(viewm,num.value)
+            2 -> Love(viewm, num.value)
             3 -> Profile()
         }
     }
@@ -167,24 +220,16 @@ fun MyProfileScreen(navController: NavHostController) {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun Profile() {
-        Text(text = "EEEEEEEEEEEE")
-        Text(text = "EEEEEEEEEEEE")
-        Text(text = "EEEEEEEEEEEE")
-        Text(text = "EEEEEEEEEEEE")
-        Text(text = "EEEEEEEEEEEE")
-
+    emty("شما هنوز وارد حساب کاربری نشده اید")
 }
-
 @Composable
 fun Pack() {
-    Text(text = "Pack")
-
+    emty("هیچ دوره فعالی ندارید")
 }
 
 @Composable
 fun Licence() {
-    Text(text = "Licence")
-
+    emty("هیچ لایسنس فعالی ندارید")
 }
 
 @Composable
@@ -194,7 +239,9 @@ fun Love(viewModel: FaveViewModel, num: Int) {
     }
     LaunchedEffect(true) {
         viewModel.allProduct.collectLatest {
-            bb = it
+            withContext(Dispatchers.Main) {
+                bb = it
+            }
         }
     }
     LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -209,14 +256,16 @@ fun Love(viewModel: FaveViewModel, num: Int) {
                     Image(
                         painter = painterResource(id = R.drawable.empty_cart),
                         contentDescription = "",
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .height(200.dp)
                     )
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         text = "لیست علاقه مندی ها خالی می باشد",
                         fontFamily = myFont,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 21.sp,
+                        fontSize = 24.sp,
                         color = Color.Red,
                         textAlign = TextAlign.Center
                     )
@@ -345,4 +394,19 @@ fun FaveItem(data: FavoriteTable, viewModel: FaveViewModel) {
         }
     }
 
+}
+@Composable
+fun emty(text:String){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(painter = painterResource(id = R.drawable.emty), contentDescription = "")
+        Text(text = text,
+            fontFamily = myFont,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold)
+
+    }
 }

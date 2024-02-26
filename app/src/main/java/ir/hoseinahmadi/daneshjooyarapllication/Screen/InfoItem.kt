@@ -1,6 +1,7 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,39 +18,58 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.sharp.Favorite
+import androidx.compose.material.icons.twotone.Favorite
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 import androidx.navigation.NavHostController
 import ir.hoseinahmadi.daneshjooyarapllication.R
 import ir.hoseinahmadi.daneshjooyarapllication.Room.Fave.FaveViewModel
@@ -61,6 +81,7 @@ import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.withContext
 
 @Composable
 fun InfoItem(navController: NavHostController, data: Int?) {
@@ -338,6 +359,7 @@ fun InfoItem(navController: NavHostController, data: Int?) {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTop(navController: NavHostController, item: FavoriteTable, viewModel: FaveViewModel) {
     var checkState by remember {
@@ -370,21 +392,24 @@ fun MyTop(navController: NavHostController, item: FavoriteTable, viewModel: Fave
 
                 })
             {
-
                 if (checkState) {
                     Icon(
                         Icons.Filled.Favorite,
                         contentDescription = "",
-                        Modifier.size(25.dp),
+                        Modifier.size(30.dp),
                         tint = Color.Red
                     )
                 } else {
-                    Icon(Icons.Outlined.Favorite, contentDescription = "", Modifier.size(25.dp))
+                    Icon(
+                        painterResource(id = R.drawable.digi_fav_icon), contentDescription = "", Modifier.size(25.dp)
+                    ,tint = Color.DarkGray
+                    )
                 }
             }
         }
 
         Row(
+            modifier = Modifier.padding(start = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -395,7 +420,7 @@ fun MyTop(navController: NavHostController, item: FavoriteTable, viewModel: Fave
             )
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
-                    Icons.Default.ArrowForward, contentDescription = "",
+                    Icons.Default.Close, contentDescription = "",
                     tint = Color.Black
                 )
             }
@@ -415,7 +440,7 @@ fun MyBottomBar(data: DataProduct, viewModel: ShopViewModel) {
     }
     BottomAppBar(
         containerColor = Color.White,
-        contentPadding = PaddingValues(8.dp),
+        contentPadding = PaddingValues(4.dp),
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(Alignment.CenterVertically),
@@ -427,34 +452,77 @@ fun MyBottomBar(data: DataProduct, viewModel: ShopViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             val priceortakh = darsadfun(data.priceOr, data.darsad)
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                Modifier
+                    .weight(0.4f)
+                    .padding(start = 10.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.toman), contentDescription = "",
-                    modifier = Modifier.size(22.dp)
-                )
-                Spacer(modifier = Modifier.width(3.dp))
-                Text(
-                    text = priceortakh,
-                    fontSize = 20.sp,
-                    fontFamily = myFont,
-                    modifier = Modifier.padding(start = 4.dp)
-                )
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(start = 8.dp)
+                ) {
+                    val zori = String.format("%,d", data.priceOr)
+                    Text(
+                        text = zori,
+                        fontFamily = myFont,
+                        fontSize = 12.sp,
+                        color = Color.Red,
+                        textDecoration = TextDecoration.LineThrough
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        modifier = Modifier
+                            .width(25.dp)
+                            .background(
+                                Color(0xFFFF0000),
+                                shape = CircleShape
+                            ),
+                        text ="${data.darsad}%" ,
+                        color = Color.White,
+                        fontFamily = myFont,
+                        fontSize = 9.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.toman), contentDescription = "",
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(3.dp))
+                    Text(
+                        text = priceortakh,
+                        fontSize = 21.sp,
+                        fontFamily = myFont,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
+
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                Modifier.weight(0.6f),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
             ) {
                 val ee = (data.priceOr * data.darsad) / 100
                 val b = data.priceOr - ee
                 LaunchedEffect(true) {
                     viewModel.chekedProduct(data.id).collect {
-                        check = it
+                        withContext(Dispatchers.Main){
+                            check = it
+                        }
                     }
                 }
-                if (!check) {
+                AnimatedVisibility(!check) {
                     Button(
+                        modifier = Modifier.padding(start = 5.dp),
                         onClick = {
                             val eee = ShopTable(
                                 data.id,
@@ -469,36 +537,45 @@ fun MyBottomBar(data: DataProduct, viewModel: ShopViewModel) {
                             containerColor = Color(0xff08c056),
                             contentColor = Color.White,
                         ),
-                        modifier = Modifier.padding(end = 4.dp),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text(
                             text = "افزودن به سبد خرید",
                             fontFamily = myFont,
-                            fontSize = 14.sp,
+                            fontSize = 17.sp,
                             color = Color.White
                         )
                     }
-                } else {
-                    IconButton(onClick = {
-                        val tt =ShopTable(data.id,"",0,"","")
-                        viewModel.deleteProduct(tt)}
-                    ) {
-                        Icon(painterResource(id = R.drawable.ic_delete),
-                            contentDescription = "",
-                            tint = Color.Red
-                            )
-                    }
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "موجود در سبد خرید",
-                        fontFamily = myFont,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFF1100)
-                    )
                 }
+                AnimatedVisibility(check) {
+                    Row(
+                        Modifier.padding(end = 5.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        IconButton(onClick = {
+                            val tt = ShopTable(data.id, "", 0, "", "")
+                            viewModel.deleteProduct(tt)
+                        }
+                        ) {
+                            Icon(
+                                painterResource(id = R.drawable.ic_delete),
+                                contentDescription = "",
+                                tint = Color.Red,
+                                modifier = Modifier.size(35.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(2.dp))
+                        Text(
+                            style = TextStyle(textDirection = TextDirection.Rtl),
+                            text = "موجود در سبد خرید",
+                            fontFamily = myFont,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFFF1100)
+                        )
+                    }
 
+                }
 
 
             }
@@ -558,8 +635,38 @@ fun infoPack(data: DataProduct) {
             .background(dancolor),
         verticalArrangement = Arrangement.Center
     ) {
-            val e = data.videoUrl
-            VideoPlayerExo(videoUrl = e)
+        Spacer(modifier = Modifier.height(12.dp))
+        val e = data.videoUrl
+        val context = LocalContext.current
+        val player = ExoPlayer.Builder(context).build().apply {
+            setMediaItem(MediaItem.fromUri(e))
+        }
+        val playerView = PlayerView(context)
+        val playWhenReady by rememberSaveable {
+            mutableStateOf(false)
+        }
+        playerView.player = player
+
+        LaunchedEffect(player) {
+            player.prepare()
+            player.playWhenReady = playWhenReady
+        }
+        DisposableEffect(player) {
+            onDispose {
+                player.stop()
+                player.release()
+            }
+        }
+        AndroidView(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(220.dp)
+                .padding(3.dp)
+                .clip(RoundedCornerShape(15.dp)),
+            factory = {
+                playerView
+            })
+
         Text(
             text = data.title,
             fontSize = 20.sp,

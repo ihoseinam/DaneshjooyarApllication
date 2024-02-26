@@ -31,4 +31,6 @@ interface ShopDao {
     @Query("SELECT EXISTS(SELECT * FROM shoptable WHERE id =:itemId)")
     fun isShopItemExist(itemId: Int): Flow<Boolean>
 
+    @get:Query("SELECT price FROM shoptable")
+    val allPrice: Flow<List<Int>>
 }

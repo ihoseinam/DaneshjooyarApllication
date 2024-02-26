@@ -325,7 +325,7 @@ fun ticher() {
         ),
     )
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(180.dp),
+        columns = GridCells.Adaptive(160.dp),
         contentPadding = PaddingValues(4.dp),
         content = {
             itemsIndexed(topTicher) { index: Int, item: TopTicher ->

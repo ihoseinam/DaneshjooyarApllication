@@ -1,5 +1,6 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.fadeIn
@@ -8,6 +9,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,14 +34,19 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -48,12 +55,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -61,28 +71,35 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import ir.hoseinahmadi.daneshjooyarapllication.Navigation.Screen
 import ir.hoseinahmadi.daneshjooyarapllication.R
+import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopTable
+import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopViewModel
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.Category
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.DataProduct
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.TopTicher
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-
+import kotlinx.coroutines.withContext
+var infoTichstate = mutableStateOf(TopTicher(1,"","","",""))
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun HomeScreen(navController: NavHostController) {
     val scrollState = rememberLazyListState()
     val loli by remember {
         derivedStateOf { scrollState.firstVisibleItemIndex == 0 }
     }
+    val viewModel = viewModel(ShopViewModel::class.java)
     Scaffold(
         containerColor = Color.White,
         floatingActionButton = {
@@ -150,7 +167,7 @@ fun HomeScreen(navController: NavHostController) {
                         )
                     )
                     itemsIndexed(newite) { _: Int, item: DataProduct ->
-                        ItemProduct(data = item, navController)
+                        ItemProduct(data = item, navController, viewModel)
                     }
                 }
 
@@ -226,11 +243,13 @@ fun HomeScreen(navController: NavHostController) {
                         ),
                     )
                     itemsIndexed(loveitem) { _: Int, item: DataProduct ->
-                        ItemProduct(data = item, navController)
+                        ItemProduct(data = item, navController, viewModel)
                     }
                 }
             }
             item {
+                var addInfo by remember{infoTichstate}
+                infoTicher(name = addInfo.name,img = addInfo.img, info = addInfo.info,addInfo.more )
                 LazyRow(
                     verticalAlignment = Alignment.CenterVertically,
                     state = rememberLazyListState(),
@@ -247,19 +266,26 @@ fun HomeScreen(navController: NavHostController) {
                             1,
                             "استاد علیرضا احمدی",
                             "https://raw.githubusercontent.com/ihoseinam/video-shop/main/ali.jpg",
-                            "متخصص برنامه نویسی موبایل "
+                            "متخصص برنامه نویسی موبایل ",
+                            "بنده علیرضا احمدی، متخصص برنامه نویسی موبایل و مدرس پکیج های آموزش برنامه نویسی اندروید در وبسایت های دانشجویار و فرادرس هستم. در زمینه های مختلفی نظیر برنامه نویسی اندروید، برنامه نویسی ویندوز، توسعه وبسایت، طراحی و گرافیک، بازی سازی و بهینه سازی موتور های جستوجو فعالیت داشته و کار کردم. ( هرچند زمینه تخصصی فعالیت من، برنامه نویسی موبایل میباشد )"
                         ),
                         TopTicher(
                             2,
                             "استاد حامد مودی",
                             "https://raw.githubusercontent.com/ihoseinam/video-shop/main/modi.jpg",
-                            "طراح و کدنویس افزونه و قالب وردپرس "
+                            "طراح و کدنویس افزونه و قالب وردپرس ",
+                            "طراح و کدنویس افزونه و قالب وردپرس و در کل عشق کدنویسی وردپرس به هر نحوی\uD83D\uDE01\n" +
+                                    "\n"
                         ),
                         TopTicher(
                             1,
                             "استاد طاها اهوازی",
                             "https://raw.githubusercontent.com/ihoseinam/video-shop/main/taha.jpg",
-                            "برنامه نویس فول استک موبایل"
+                            "برنامه نویس فول استک موبایل",
+                            "برنامه نویس فول استک موبایل.\n" +
+                                    "دانشجوی علوم کامپیوتر (Computer Science)\n" +
+                                    "از کودکی به مباحث برنامه نویسی کامپیوتر علاقه مند شدم و ۵ سال به صورت جدی در این حوزه به تحقیق و آموزش پرداختم.\n" +
+                                    "دوست دارم تا جایی که بتونم از چیزهایی که توی این مدت یادگرفتم ، با شما به اشتراک بزارم و در حد توانم توی مسیر برنامه نویسیتون تاثیر گذاشته باشم ."
                         ),
                     )
                     itemsIndexed(topTicher) { _, item ->
@@ -286,26 +312,28 @@ fun HomeScreen(navController: NavHostController) {
                             "علیرضا احمدی",
                             "https://www.daneshjooyar.com/wp-content/uploads/2024/02/woocommerce-min-400x225.png",
                             0,
+                            100,
                         ),
                         DataProduct(
                             32,
                             "آموزش وردپرس رایگان(پروژه ساخت سایت خبری)",
                             "علیرضان",
                             "https://www.daneshjooyar.com/wp-content/uploads/2024/02/woocommerce-min.png",
-                            0,
+                            3000000,
+                            100,
                         ),
                         DataProduct(
                             33,
                             "آموزش گرامر زبان انگلیسی ( یادگیری از صفر )",
                             "تینا ظهوری",
                             "https://www.daneshjooyar.com/wp-content/uploads/2023/12/Grammar-min-400x225.png",
-                            0,
-                            0,
+                            2800000,
+                            100,
                         )
 
                     )
                     itemsIndexed(freePack) { _, item ->
-                        FreeItem(data = item, navController)
+                        ItemProduct(data = item, navController, viewModel)
                     }
                 }
             }
@@ -714,8 +742,19 @@ fun TopProduct(text: String) {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
-fun ItemProduct(data: DataProduct, navController: NavHostController) {
+fun ItemProduct(data: DataProduct, navController: NavHostController, viewModel: ShopViewModel) {
     val priceortakh = darsadfun(data.priceOr, data.darsad)
+    var check by remember {
+        mutableStateOf(false)
+    }
+    LaunchedEffect(true) {
+        viewModel.chekedProduct(data.id).collect {
+            withContext(Dispatchers.Main) {
+                check = it
+            }
+        }
+    }
+
     Card(
         onClick = {
             navController.navigate(
@@ -729,7 +768,7 @@ fun ItemProduct(data: DataProduct, navController: NavHostController) {
         shape = RoundedCornerShape(5.dp),
         modifier = Modifier
             .width(300.dp)
-            .height(315.dp)
+            .height(330.dp)
             .padding(8.dp)
     ) {
         Column(
@@ -770,7 +809,7 @@ fun ItemProduct(data: DataProduct, navController: NavHostController) {
                     )
                 }
             }
-            Column(modifier = Modifier.weight(0.5f)) {
+            Column(modifier = Modifier.weight(0.5f), verticalArrangement = Arrangement.Center) {
                 Text(
                     text = data.title,
                     textAlign = TextAlign.End,
@@ -779,16 +818,52 @@ fun ItemProduct(data: DataProduct, navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth(),
 
                     )
-                Text(
-                    text = data.nameTicher,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 4.dp),
-                    fontSize = 15.sp,
-                    fontFamily = myFont,
-                    textAlign = TextAlign.End,
-                    color = dancolor
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(
+                        modifier = Modifier.padding(top = 4.dp),
+                        onClick = {
+                            val ee = (data.priceOr * data.darsad) / 100
+                            val b = data.priceOr - ee
+                            val eee = ShopTable(data.id, data.title, b, data.img, data.nameTicher)
+                            viewModel.addNewProduct(eee)
+                        }) {
+                        AnimatedVisibility(!check) {
+                            Icon(
+                                Icons.Rounded.AddCircle,
+                                contentDescription = "",
+                                tint = Color.White,
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .border(
+                                        0.2.dp, Color.Red,
+                                        CircleShape
+                                    )
+                                    .background(Color.Red)
+                            )
+                        }
+                        AnimatedVisibility(check) {
+                            Icon(
+                                Icons.Default.CheckCircle,
+                                contentDescription = "",
+                                tint = Color(0xFF00FF0A)
+                            )
+                        }
+                    }
+                    Text(
+                        text = data.nameTicher,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 4.dp),
+                        fontSize = 15.sp,
+                        fontFamily = myFont,
+                        textAlign = TextAlign.End,
+                        color = dancolor
+                    )
+                }
                 Spacer(modifier = Modifier.height(5.dp))
                 Spacer(
                     modifier = Modifier
@@ -843,72 +918,6 @@ fun ItemProduct(data: DataProduct, navController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
-@Composable
-fun FreeItem(data: DataProduct, navController: NavHostController) {
-    Card(
-        onClick = {
-            navController.navigate(Screen.InfoItemScreen.route + "?data=${data.id}")
-        },
-        elevation = CardDefaults.cardElevation(15.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
-        modifier = Modifier
-            .width(285.dp)
-            .height(300.dp)
-            .padding(8.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 5.dp)
-        ) {
-            GlideImage(
-                model = data.img,
-                contentDescription = "",
-                Modifier
-                    .width(270.dp)
-                    .padding(top = 5.dp)
-                    .height(160.dp),
-                contentScale = ContentScale.Crop
-            )
-            Text(
-                text = data.title,
-                fontFamily = myFont,
-                fontSize = 14.sp,
-                textAlign = TextAlign.End,
-                color = Color.Black,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = data.nameTicher,
-                fontFamily = myFont,
-                fontSize = 15.sp,
-                color = dancolor,
-                textAlign = TextAlign.End,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .background(Color(0x0F626060))
-            )
-            Text(
-                text = "رایگان",
-                fontFamily = myFont,
-                fontSize = 16.sp,
-                textAlign = TextAlign.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 4.dp),
-                color = Color.Black
-            )
-        }
-    }
-}
 
 private fun darsadfun(price: Int, darsad: Int): String {
     return if (darsad > 0) {
@@ -920,10 +929,15 @@ private fun darsadfun(price: Int, darsad: Int): String {
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
+@OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TopTicher(data: TopTicher) {
     Card(
+        onClick = {
+            openInfoTich.value = true
+            val bb =TopTicher(0,data.name,data.img,data.info,data.more)
+            infoTichstate.value=bb
+        },
         elevation = CardDefaults.cardElevation(15.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -1085,10 +1099,53 @@ fun Catitem(data: Category) {
 fun MyNavigationDrawer() {
 }
 
-fun pasi2(): Flow<Int> = flowOf(12, 15, 45, 5, 554, 46, 5, 4, 12, 45, 5)
-fun pasi(): Flow<Int> = flow {
-    for (item in 1..10) {
-        delay(10)
-        emit(item)
+val openInfoTich = mutableStateOf(false)
+
+@OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun infoTicher(name:String,img:String,info:String,more:String) {
+    var ee by remember {
+        openInfoTich
     }
+    if (ee) {
+        ModalBottomSheet(
+            containerColor = Color.White,
+            onDismissRequest = { openInfoTich.value = false }) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 4.dp,),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                GlideImage(
+                    model = img, contentDescription = "",
+                    Modifier.clip(RoundedCornerShape(20.dp))
+                )
+                Text(
+                    text = name,
+                    fontFamily = myFont,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = info,
+                    fontFamily = myFont,
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = more,
+                    fontFamily = myFont,
+                    fontSize = 12.sp,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 3.dp),
+                    textAlign = TextAlign.End,
+                    color = dancolor
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+
+            }
+        }
+    }
+
 }
