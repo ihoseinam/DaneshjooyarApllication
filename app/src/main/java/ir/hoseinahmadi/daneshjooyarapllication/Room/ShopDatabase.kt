@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import ir.hoseinahmadi.daneshjooyarapllication.Room.Fave.FaveDao
 import ir.hoseinahmadi.daneshjooyarapllication.Room.Fave.FavoriteTable
 
-@Database(entities = [ShopTable::class, FavoriteTable:: class], version = 1, exportSchema = false)
+@Database(entities = [ShopTable::class, FavoriteTable:: class], version = 2, exportSchema = false)
 abstract class ShopDatabase :RoomDatabase(){
     abstract fun ShopDao(): ShopDao
     abstract fun FaveDao():FaveDao

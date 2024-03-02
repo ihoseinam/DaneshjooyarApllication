@@ -13,15 +13,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -36,17 +39,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
 
 var errorname = mutableStateOf(false)
@@ -59,7 +67,10 @@ fun LoginScreen(navController: NavHostController) {
     val pref = ee.getSharedPreferences("username", Context.MODE_PRIVATE)
 
     var nameOrFa by remember {
-        mutableStateOf("")
+        mutableStateOf(pref.getString("name",""))
+    }
+    var phon by remember {
+        mutableStateOf(pref.getString("phone",""))
     }
     var er by remember {
         errorname
@@ -90,11 +101,17 @@ fun LoginScreen(navController: NavHostController) {
                 painter = painterResource(id = R.drawable.logotype),
                 contentDescription = ""
             )
-            Spacer(modifier = Modifier.height(60.dp))
-            TextField(
-                value = nameOrFa, onValueChange = { nameOrFa = it },
-                modifier = Modifier.fillMaxWidth(0.9f),
-                textStyle = TextStyle(textDirection = TextDirection.Rtl),
+            Spacer(modifier = Modifier.height(40.dp))
+           TextField(
+                value = nameOrFa.toString(), onValueChange = { nameOrFa = it },
+                modifier = Modifier
+                    .fillMaxWidth(0.95f)
+                    .height(60.dp),
+                textStyle = TextStyle(
+                    textDirection = TextDirection.Rtl,
+                    fontFamily = myFont,
+                    fontSize = 14.sp
+                ),
                 isError = er,
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -134,7 +151,47 @@ fun LoginScreen(navController: NavHostController) {
                     )
                 },
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(5.dp))
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth(0.95f)
+                    .height(60.dp),
+                textStyle = TextStyle(
+                    textDirection = TextDirection.Rtl,
+                    fontFamily = myFont,
+                    fontSize = 14.sp
+                ),
+                value = phon.toString(),
+                onValueChange = {
+                    phon = it
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                singleLine = true,
+                label = {
+                    Text(
+                        text = "تلفن",
+                        fontFamily = myFont,
+                        modifier = Modifier.fillMaxWidth(),
+                        style = TextStyle(
+                            textDirection = TextDirection.Ltr
+                        ),
+                        textAlign = TextAlign.End,
+                    )
+                },
+                placeholder = {
+                    Text(text = "شماره تلفن خود را وارد کنید",
+                        fontFamily = myFont,
+                        modifier = Modifier.fillMaxWidth(),
+                        fontSize = 14.sp,
+                        style = TextStyle(
+                            textDirection = TextDirection.Ltr
+                        ),
+                        textAlign = TextAlign.End,
+                        )
+                }
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
@@ -142,51 +199,33 @@ fun LoginScreen(navController: NavHostController) {
                     .fillMaxWidth()
                     .padding(horizontal = 5.dp)
             ) {
-                TextButton(
-                    modifier = Modifier
-                        .weight(0.5f)
-                        .fillMaxWidth(),
-                    onClick = {
-                        er = nameOrFa.isEmpty()
-                        if (nameOrFa.isNotEmpty()) {
-                            val edit = pref.edit()
-                            edit.putString("name", nameOrFa)
-                            edit.apply()
-                            navController.popBackStack()
-                        }
-                    }) {
-                    Text(
-                        text = "ثبت نام",
-                        fontFamily = myFont,
-                        fontSize = 16.sp
-                    )
-                }
                 Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = dancolor,
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
-                        .weight(0.5f)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(horizontal = 3.dp)
+                        .clip(RoundedCornerShape(11.dp)),
                     onClick = {
-                        er = nameOrFa.isEmpty()
-                        if (nameOrFa.isNotEmpty()) {
+                        er = nameOrFa!!.isEmpty()
+                        if (nameOrFa!!.isNotEmpty()) {
                             val edit = pref.edit()
                             edit.putString("name", nameOrFa)
+                            edit.putString("phone", phon)
                             edit.apply()
                             navController.popBackStack()
                         }
                     }) {
                     Text(
-                        text = "ورود",
+                        text = "ذخیره",
                         fontFamily = myFont,
-                        fontSize = 16.sp
+                        fontSize = 18.sp,
+                        color = Color.White
                     )
                 }
-            }
-            TextButton(onClick = {}) {
-                Text(
-                    text = "مشخصات خودرا فراموش کرده اید؟",
-                    fontFamily = myFont,
-                    fontSize = 12.sp
-                )
             }
 
         }

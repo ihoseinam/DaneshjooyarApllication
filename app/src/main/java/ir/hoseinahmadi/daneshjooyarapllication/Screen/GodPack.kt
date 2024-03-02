@@ -221,46 +221,39 @@ fun TopTicherTab(data: TopTicher) {
     Card(
         elevation = CardDefaults.cardElevation(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
+            containerColor = Color.White),
         modifier = Modifier
             .fillMaxWidth(0.5f)
-            .height(410.dp)
-            .clickable { }
+            .height(376.dp)
             .padding(2.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.End,
+            modifier = Modifier.fillMaxSize().padding(bottom = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             GlideImage(
                 modifier = Modifier
-                    .width(240.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .width(210.dp)
+                    .clip(RoundedCornerShape(25.dp))
                     .height(300.dp)
-                    .padding(start = 8.dp, end = 8.dp, top = 4.dp),
+                    .padding(start = 4.dp, end = 4.dp, top = 2.dp),
                 model = data.img,
                 contentDescription = "",
                 contentScale = ContentScale.Crop
             )
             Text(
                 text = data.name,
-                fontSize = 20.sp,
+                fontSize = 16.sp,
                 fontFamily = myFont,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(end = 6.dp)
             )
-            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = data.info,
-                fontSize = 14.sp,
+                fontSize = 11.sp,
                 fontFamily = myFont,
-                color = Color.Black,
-                textAlign = TextAlign.End,
-                modifier = Modifier
-                    .padding(end = 6.dp)
+                color = dancolor,
+                textAlign = TextAlign.Center,
             )
 
         }

@@ -192,14 +192,16 @@ fun ShopingCard(navController: NavHostController) {
                         Image(
                             painter = painterResource(id = R.drawable.empty_cart),
                             contentDescription = "",
-                            modifier = Modifier.fillMaxSize().height(200.dp)
+                            modifier = Modifier.size(300.dp,200.dp)
                         )
                         Text(
+                            textAlign = TextAlign.Center,
                             text = "سبد خرید خالی می باشد",
                             fontFamily = myFont,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 28.sp,
-                            color = Color.Red
+                            fontSize = 30.sp,
+                            color = Color.Red,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
                 }
@@ -229,45 +231,41 @@ fun ShopItem(data: ShopTable, viewModel: ShopViewModel, navController: NavHostCo
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .height(140.dp)
             .padding(2.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(3.dp),
+                .padding(5.dp),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.weight(0.1f).padding(top = 32.dp)
             ) {
                 IconButton(
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = Color.White,
-                        contentColor = Color.Red,
-                    ),
+                        contentColor = Color.Red,),
                     onClick = {
                         val ee = ShopTable(data.id, "", 0, "", "")
                         viewModel.deleteProduct(ee)
-                    }) {
+                    },
+                    modifier = Modifier.size(30.dp)
+                ) {
                     Icon(
                         painterResource(id = R.drawable.ic_delete),
                         contentDescription = "",
                         tint = Color.Red,
                     )
-
                 }
             }
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .weight(0.6f),
+                    .weight(0.55f),
                 horizontalAlignment = Alignment.End,
             ) {
-                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     fontSize = 14.sp,
@@ -309,6 +307,7 @@ fun ShopItem(data: ShopTable, viewModel: ShopViewModel, navController: NavHostCo
                         fontSize = 16.sp,
                         color = Color.Red
                     )
+
                 }
 
             }
@@ -317,7 +316,7 @@ fun ShopItem(data: ShopTable, viewModel: ShopViewModel, navController: NavHostCo
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .weight(0.4f)
+                    .weight(0.35f)
             ) {
                 GlideImage(
                     modifier = Modifier

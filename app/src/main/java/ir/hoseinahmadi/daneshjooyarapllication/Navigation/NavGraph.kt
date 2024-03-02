@@ -30,9 +30,7 @@ fun SetUpNavGraph(navController: NavHostController) {
         {
             PackGold(navController = navController)
         }
-
-        composable(route = Screen.InfoItemScreen.route
-                + "?data={data}",
+        composable(route = Screen.InfoItemScreen.route + "?data={data}",
             arguments = listOf(
                 navArgument("data") {
                     type = NavType.IntType
@@ -40,7 +38,6 @@ fun SetUpNavGraph(navController: NavHostController) {
                 }
             )
         ) {
-
             InfoItem(
                 navController = navController,
                 data = it.arguments?.getInt("data",0)

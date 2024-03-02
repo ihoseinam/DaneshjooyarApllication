@@ -21,16 +21,11 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.sharp.Favorite
-import androidx.compose.material.icons.twotone.Favorite
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -45,7 +40,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,7 +49,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -80,7 +73,6 @@ import ir.hoseinahmadi.daneshjooyarapllication.dataClas.DataProduct
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -236,8 +228,8 @@ fun InfoItem(navController: NavHostController, data: Int?) {
         DataProduct(
             32,
             "آموزش وردپرس رایگان(پروژه ساخت سایت خبری)",
-            "",
-            "https://www.daneshjooyar.com/wp-content/uploads/2024/02/woocommerce-min.png",
+            "علیرضا احمدی",
+            "https://www.daneshjooyar.com/wp-content/uploads/2023/12/Wordpress-min-511x312.png",
             0,
             0,
             11,
@@ -278,10 +270,12 @@ fun InfoItem(navController: NavHostController, data: Int?) {
         )
     )
     val product = allProduct.find { it.id == data }
+    val ee = (product!!.priceOr * product.darsad) / 100
+    val b = product.priceOr - ee
     val fave = FavoriteTable(
         product!!.id,
         product.title,
-        product.priceOr,
+        b,
         product.img,
         product.nameTicher
     )
@@ -394,15 +388,16 @@ fun MyTop(navController: NavHostController, item: FavoriteTable, viewModel: Fave
             {
                 if (checkState) {
                     Icon(
-                        Icons.Filled.Favorite,
+                        Icons.Rounded.Favorite,
                         contentDescription = "",
                         Modifier.size(30.dp),
                         tint = Color.Red
                     )
                 } else {
                     Icon(
-                        painterResource(id = R.drawable.digi_fav_icon), contentDescription = "", Modifier.size(25.dp)
-                    ,tint = Color.DarkGray
+                        Icons.Rounded.FavoriteBorder, contentDescription = "",
+                        tint = Color.DarkGray,
+                        modifier = Modifier.size(30.dp)
                     )
                 }
             }
@@ -468,22 +463,22 @@ fun MyBottomBar(data: DataProduct, viewModel: ShopViewModel) {
                     Text(
                         text = zori,
                         fontFamily = myFont,
-                        fontSize = 12.sp,
+                        fontSize = 13.sp,
                         color = Color.Red,
                         textDecoration = TextDecoration.LineThrough
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         modifier = Modifier
-                            .width(25.dp)
+                            .width(27.dp)
                             .background(
                                 Color(0xFFFF0000),
                                 shape = CircleShape
                             ),
-                        text ="${data.darsad}%" ,
+                        text = "${data.darsad}%",
                         color = Color.White,
                         fontFamily = myFont,
-                        fontSize = 9.sp,
+                        fontSize = 10.sp,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -515,7 +510,7 @@ fun MyBottomBar(data: DataProduct, viewModel: ShopViewModel) {
                 val b = data.priceOr - ee
                 LaunchedEffect(true) {
                     viewModel.chekedProduct(data.id).collect {
-                        withContext(Dispatchers.Main){
+                        withContext(Dispatchers.Main) {
                             check = it
                         }
                     }

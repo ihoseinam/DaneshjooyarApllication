@@ -8,6 +8,8 @@ data class TopTicher(
     val name:String,
     val img:String,
     val info :String,
-    val more :String=""
+    val numd :Int=0,
+    val daneshjo :Int=0,
+    val houre :Int=0,
 )
 
