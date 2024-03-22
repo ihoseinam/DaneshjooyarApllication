@@ -1,22 +1,22 @@
-package ir.hoseinahmadi.daneshjooyarapllication.Room
+package ir.hoseinahmadi.daneshjooyarapllication.Room.shop
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ir.hoseinahmadi.daneshjooyarapllication.Room.repository.ShopRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ShopViewModel(application: Application) : AndroidViewModel(application) {
-    val allProduct: Flow<List<ShopTable>>
+@HiltViewModel
+class ShopViewModel @Inject constructor(
     private val repositore: ShopRepository
+) : ViewModel() {
 
-    init {
-        val shopDao = ShopDatabase.getDatabase(application).ShopDao()
-        repositore = ShopRepository(shopDao)
-        allProduct = repositore.allProduct
-    }
+    val allProduct: Flow<List<ShopTable>> = repositore.allProduct
 
     fun addNewProduct(product: ShopTable) {
         viewModelScope.launch(Dispatchers.IO) {

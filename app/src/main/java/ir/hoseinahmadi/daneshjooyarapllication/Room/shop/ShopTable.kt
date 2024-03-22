@@ -1,4 +1,4 @@
-package ir.hoseinahmadi.daneshjooyarapllication.Room
+package ir.hoseinahmadi.daneshjooyarapllication.Room.shop
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -53,7 +53,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -82,6 +81,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -89,32 +89,29 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import ir.hoseinahmadi.daneshjooyarapllication.Navigation.Screen
 import ir.hoseinahmadi.daneshjooyarapllication.R
-import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopTable
-import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopViewModel
+import ir.hoseinahmadi.daneshjooyarapllication.Room.shop.ShopTable
+import ir.hoseinahmadi.daneshjooyarapllication.Room.shop.ShopViewModel
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.Category
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.DataProduct
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.TopTicher
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Delay
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 var infoTichstate = mutableStateOf(TopTicher(1, "", "", "", 0, 0, 0))
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, viewModel: ShopViewModel= hiltViewModel()) {
     val scrollState = rememberLazyListState()
     val loli by remember {
         derivedStateOf { scrollState.firstVisibleItemIndex == 0 }
     }
-    val viewModel = viewModel(ShopViewModel::class.java)
+
     val drawerstate = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scop = rememberCoroutineScope()
     val contex = LocalContext.current

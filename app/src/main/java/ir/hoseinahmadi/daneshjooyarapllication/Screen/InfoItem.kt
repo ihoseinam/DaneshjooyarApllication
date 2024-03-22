@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.BottomAppBar
@@ -59,6 +58,7 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
@@ -67,8 +67,8 @@ import androidx.navigation.NavHostController
 import ir.hoseinahmadi.daneshjooyarapllication.R
 import ir.hoseinahmadi.daneshjooyarapllication.Room.Fave.FaveViewModel
 import ir.hoseinahmadi.daneshjooyarapllication.Room.Fave.FavoriteTable
-import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopTable
-import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopViewModel
+import ir.hoseinahmadi.daneshjooyarapllication.Room.shop.ShopTable
+import ir.hoseinahmadi.daneshjooyarapllication.Room.shop.ShopViewModel
 import ir.hoseinahmadi.daneshjooyarapllication.dataClas.DataProduct
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
@@ -76,7 +76,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun InfoItem(navController: NavHostController, data: Int?) {
+fun InfoItem(
+    navController: NavHostController, data: Int?,
+    viewModel: ShopViewModel = hiltViewModel(),
+    viewMode2: FaveViewModel = hiltViewModel()
+) {
     val allProduct = arrayOf<DataProduct>(
         DataProduct(
             1,
@@ -279,8 +283,8 @@ fun InfoItem(navController: NavHostController, data: Int?) {
         product.img,
         product.nameTicher
     )
-    val viewModel = viewModel(ShopViewModel::class.java)
-    val viewMode2 = viewModel(FaveViewModel::class.java)
+
+
     Scaffold(
         topBar = {
             MyTop(navController, fave, viewMode2)

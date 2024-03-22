@@ -1,4 +1,4 @@
-package ir.hoseinahmadi.daneshjooyarapllication.Room
+package ir.hoseinahmadi.daneshjooyarapllication.Room.shop
 
 import androidx.room.Dao
 import androidx.room.Delete

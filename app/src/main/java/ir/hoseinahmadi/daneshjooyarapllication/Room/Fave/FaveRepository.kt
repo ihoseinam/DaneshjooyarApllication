@@ -1,11 +1,11 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Room.Fave
 
-import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopDao
-import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopTable
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Named
 
-class FaveRepository(private val Favedao: FaveDao) {
-
+class FaveRepository @Inject constructor(
+    private val Favedao: FaveDao) {
     val allProduct: Flow<List<FavoriteTable>> = Favedao.getAllFaveItem()
 
     val allCount = Favedao.getFaveCount()

@@ -1,10 +1,11 @@
-package ir.hoseinahmadi.daneshjooyarapllication.Room.repository
+package ir.hoseinahmadi.daneshjooyarapllication.Room.shop
 
-import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopDao
-import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopTable
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Named
 
-class ShopRepository(private val shopDao: ShopDao) {
+class ShopRepository @Inject constructor (
+    private val shopDao: ShopDao) {
 
     val allProduct: Flow<List<ShopTable>> = shopDao.getAllProduct()
     val allCount = shopDao.getProductCount()

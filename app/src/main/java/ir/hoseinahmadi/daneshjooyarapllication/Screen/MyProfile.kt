@@ -2,6 +2,7 @@ package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material3.Badge
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -50,7 +52,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -60,6 +61,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -79,12 +81,14 @@ val selectedTabProfile = mutableIntStateOf(3)
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyProfileScreen(navController: NavHostController) {
+fun MyProfileScreen(
+    navController: NavHostController,
+    viewModel: FaveViewModel = hiltViewModel()
+) {
     var selectedTabIndex by remember {
         selectedTabProfile
     }
-    val viewm = viewModel(FaveViewModel::class.java)
-    val num = viewm.getProductCount.collectAsState(0)
+    val num = viewModel.getProductCount.collectAsState(0)
     val tabTitle = listOf(
         "لایسنس ها",
         "دوره ها",
@@ -166,11 +170,12 @@ fun MyProfileScreen(navController: NavHostController) {
         when (selectedTabIndex) {
             0 -> Licence()
             1 -> Pack()
-            2 -> Love(viewm, num.value)
+            2 -> Love(viewModel, num.value)
             3 -> Profile(navController)
         }
     }
 }
+
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -178,7 +183,6 @@ fun MyProfileScreen(navController: NavHostController) {
 fun Profile(navController: NavHostController) {
     val ee = LocalContext.current
     val pref = ee.getSharedPreferences("username", Context.MODE_PRIVATE)
-
     val name = mutableStateOf(pref.getString("name", "کاربر ناشناس"))
     val phone = mutableStateOf(pref.getString("phone", ""))
     val nameState by remember {
@@ -196,7 +200,7 @@ fun Profile(navController: NavHostController) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(onClick = {
-            navController.navigate(Screen.LoginScreen.route)
+            navController.navigate(Screen.Acount.route)
         }) {
             Icon(
                 Icons.Rounded.Edit, contentDescription = "", tint = dancolor,
@@ -254,7 +258,13 @@ fun Profile(navController: NavHostController) {
         )
         Spacer(modifier = Modifier.height(8.dp))
         profileInfo()
+
+        Button(onClick = { navController.navigate(Screen.LoginScreen.route) }) {
+            Text(text = "Login")
+        }
+
     }
+
 
 }
 

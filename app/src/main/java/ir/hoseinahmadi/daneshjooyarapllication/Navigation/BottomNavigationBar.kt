@@ -1,9 +1,7 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Navigation
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -29,11 +27,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import ir.hoseinahmadi.daneshjooyarapllication.Room.Fave.FaveViewModel
-import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopViewModel
+import ir.hoseinahmadi.daneshjooyarapllication.Room.shop.ShopViewModel
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
 
@@ -43,6 +42,8 @@ fun BottomNavigationBar(
     navController: NavController,
     onItemClick: (BottomNavItem) -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: ShopViewModel = hiltViewModel(),
+    viewMode2: FaveViewModel = hiltViewModel()
 ) {
     val item = listOf(
         BottomNavItem(
@@ -81,11 +82,10 @@ fun BottomNavigationBar(
                 tonalElevation = 15.dp,
                 containerColor = Color(0xFFFFFFFF),
             ) {
-                val viewModel = viewModel(ShopViewModel::class.java)
-                val viewModel2 = viewModel(FaveViewModel::class.java)
                 val cartCount = viewModel.getProductCount.collectAsState(0)
-                val num = viewModel2.getProductCount.collectAsState(0)
+                val num = viewMode2.getProductCount.collectAsState(0)
                 item.forEachIndexed { index, item ->
+
                     val selected = item.route == backStackEntry.value?.destination?.route
                     NavigationBarItem(
                         selected = selected,
@@ -140,7 +140,8 @@ fun BottomNavigationBar(
                                 fontFamily = myFont,
                                 fontWeight = FontWeight.Bold
                             )
-                        }
+                        },
+                        alwaysShowLabel = selected
                     )
                 }
             }

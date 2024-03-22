@@ -1,15 +1,11 @@
 package ir.hoseinahmadi.daneshjooyarapllication.Screen
 
-import android.annotation.SuppressLint
-import android.content.Context.MODE_PRIVATE
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -48,27 +43,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import ir.hoseinahmadi.daneshjooyarapllication.Navigation.Screen
 import ir.hoseinahmadi.daneshjooyarapllication.R
-import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopTable
-import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopViewModel
+import ir.hoseinahmadi.daneshjooyarapllication.Room.Fave.FaveViewModel
+import ir.hoseinahmadi.daneshjooyarapllication.Room.shop.ShopTable
+import ir.hoseinahmadi.daneshjooyarapllication.Room.shop.ShopViewModel
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.dancolor
 import ir.hoseinahmadi.daneshjooyarapllication.ui.theme.myFont
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.reduce
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -76,8 +70,10 @@ val openDialog = mutableStateOf(false)
 
 @OptIn(DelicateCoroutinesApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ShopingCard(navController: NavHostController) {
-    val viewModel = viewModel(ShopViewModel::class.java)
+fun ShopingCard(
+    navController: NavHostController,
+    viewModel: ShopViewModel = hiltViewModel(),
+) {
     var llll by remember {
         mutableStateOf(emptyList<ShopTable>())
     }
@@ -192,7 +188,7 @@ fun ShopingCard(navController: NavHostController) {
                         Image(
                             painter = painterResource(id = R.drawable.empty_cart),
                             contentDescription = "",
-                            modifier = Modifier.size(300.dp,200.dp)
+                            modifier = Modifier.size(300.dp, 200.dp)
                         )
                         Text(
                             textAlign = TextAlign.Center,
@@ -240,12 +236,15 @@ fun ShopItem(data: ShopTable, viewModel: ShopViewModel, navController: NavHostCo
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.weight(0.1f).padding(top = 32.dp)
+                modifier = Modifier
+                    .weight(0.1f)
+                    .padding(top = 32.dp)
             ) {
                 IconButton(
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = Color.White,
-                        contentColor = Color.Red,),
+                        contentColor = Color.Red,
+                    ),
                     onClick = {
                         val ee = ShopTable(data.id, "", 0, "", "")
                         viewModel.deleteProduct(ee)

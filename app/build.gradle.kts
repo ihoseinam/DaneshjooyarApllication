@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -98,5 +99,18 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
 
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+
+
+
+    //hilt di
+    val hiltVersion = "2.48"
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    ksp("com.google.dagger:hilt-compiler:$hiltVersion")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
 }

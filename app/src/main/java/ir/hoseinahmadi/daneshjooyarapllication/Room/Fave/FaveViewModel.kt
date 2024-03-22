@@ -2,25 +2,23 @@ package ir.hoseinahmadi.daneshjooyarapllication.Room.Fave
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopDatabase
-import ir.hoseinahmadi.daneshjooyarapllication.Room.ShopTable
-import ir.hoseinahmadi.daneshjooyarapllication.Room.repository.ShopRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FaveViewModel(application: Application) : AndroidViewModel(application) {
-    val allProduct: Flow<List<FavoriteTable>>
+@HiltViewModel
+class FaveViewModel
+@Inject constructor(
+
     private val repositore: FaveRepository
+) : ViewModel() {
 
-    init {
-        val FaveDao = ShopDatabase.getDatabase(application).FaveDao()
-        repositore = FaveRepository(FaveDao)
-        allProduct = repositore.allProduct
-    }
+    val allProduct: Flow<List<FavoriteTable>> = repositore.allProduct
 
     fun addNewProduct(product: FavoriteTable) {
         viewModelScope.launch(Dispatchers.IO) {
